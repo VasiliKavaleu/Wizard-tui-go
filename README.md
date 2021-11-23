@@ -1,5 +1,7 @@
 ## TUI configuration wizard
 
+#### Creates config yaml file with data from input form
+
 Clone project, and install dependency
 
 ```bash

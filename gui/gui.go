@@ -81,14 +81,12 @@ type Gui struct {
 	editServer bool
 }
 
-// New create new gui
 func New() *Gui {
 	return &Gui{
 		app:   tview.NewApplication(),
 	}
 }
 
-// Start application
 func (g *Gui) Start() error {
 	g.initMenu()
 	if err := g.app.Run(); err != nil {
@@ -161,15 +159,11 @@ func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
 
 	info := tview.NewTextView() 
 	info.SetBorder(true)
-	info.SetText("Mediaserver Wizard v1.0 - Copyright 2021 NavekSoft") 
+	info.SetText("Mediaserver Wizard v1.0") 
 	info.SetTextAlign(tview.AlignCenter)
 	
 	mainLayout := tview.NewFlex().SetDirection(tview.FlexRow). 
-	AddItem(commandList, 10, 1, true) // 10, 1
-
-	// inner_layout := tview.NewFlex().SetDirection(tview.FlexRow).
-	// 	AddItem(mainLayout, 0, 1, true).
-	// 	AddItem(info, 3, 1, false)
+	AddItem(commandList, 10, 1, true)
 
 	flex := tview.NewFlex().
 	AddItem(tview.NewBox(), 0, 1, false).
@@ -179,7 +173,7 @@ func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
 		AddItem(info, 3, 1, false), 0, 2, true).
 	AddItem(tview.NewBox(), 0, 1, false)
 
-	clayout := tview.NewFrame(flex).SetBorders(4, 2, 8, 8, 12, 12)
+	clayout := tview.NewFrame(flex).SetBorders(4, 2, 8, 8, 0, 0)
 
 	return clayout
 }
