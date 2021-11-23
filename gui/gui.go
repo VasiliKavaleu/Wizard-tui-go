@@ -6,75 +6,6 @@ import (
 )
 
 
-var inputWidth = 50
-
-var mainMenuTitle = " Select an option "
-var ValidationTitle = "Check input value"
-var quitMsg = "Exit? Server configuration will be completed."
-var saveSuccessConfMsg = "Configuration file saved successfully!"
-var labelServerForm = " Fill out server configuration form "
-var serverFormId = "serverForm"
-var apiFormId = "apiForm"
-var cpanelFormId = "cpanelForm"
-var usageDropDownOptions = []string{"Disable", "Enable"}
-var controllerDsnOptions = []string{1: "http://", 2: "ws://", 3: "mysql://", 4: "rabbitmq://", 5: "tarantool://"}
-var apiAuthDropDownOptions = []string{"none", "basic", "digest", "token"}
-var cpanelAuthDropDownOptions = []string{"none", "basic", "digest"}
-var controllerEventsOptions = []string{"up", "state", "stream", "cluster"}
-var serverFilePath = "server.yaml"
-var passwordMask = '*'
-
-var ServerInputLabel = map[string]string{
-	"mediaThreads": "Number of mediaserver threads",
-	"mediaStreams": "List paths or file streams configuration",
-	"mediaStorages": "List mediaserver storages",
-
-	"rtspThreads": "Number of RTSP threads",
-	"rtspListen": "RTSP socket",
-	"publishThreads": "Number of publish threads",
-	"publishListen": "Publish socket",
-	"webThreads": "Number of web threads",
-	"webListen": "Web socket",
-
-	"broadcastSsl": "Broadcast SSL",
-	"broadcastWhitelist": "Broadcast whitelist",
-
-	"tokenSecret": "Token secret",
-	"tokenTtl": "Token TTL",
-	"controllerDsn": "Сontroller DSN",
-	"controllerEvents": "Сontroller events",
-	
-	"apiUsage": "API usage",
-	"apiListen": "Socket",
-	"apiModule": "Module",
-	"apiSsl": "SSL",
-	"apiWhitelist": "Whitelist",
-	"apiAuth": "Authorization",
-	"apiUsersAdmin": "Password for admin",
-	"apiUsersRoot": "Password for root",
-
-	"cpanelUsage": "Cpanel usage",
-	"cpanelListen": "Socket",
-	"cpanelModule": "Module",
-	"cpanelSsl": "SSL",
-	"cpanelWhitelist": "Whitelist",
-	"cpanelAuth": "Authorization",
-	"cpanelUsersAdmin": "Password for admin",
-	"cpanelUsersRoot": "Password for root",
-	"cpanelUsersUser": "Password for user",
-	"cpanelUsersGuest": "Password for guest",
-
-	"clusterUsage": "Cluster usage",
-	"clusterId": "Cluster usage",
-	"clusterNode": "Cluster node",
-	"clusterPool": "Cluster pool",
-	"clusterWarmingUp": "Warming up time",
-	"clusterRetries": "Number of retries",
-	"clusterInterval": "Interval for reconnect",
-
-}
-
-
 type Gui struct {
 	app   *tview.Application
 	pages *tview.Pages
@@ -133,16 +64,30 @@ func (g *Gui) drawQuitNotifyForm() {
 	g.pages.AddAndSwitchToPage("quitNotify", modal, true)
 }
 
-func (g *Gui) drawNotifyMsgOkForm(msg string, showPage string) {
+func (g *Gui) drawOkCancelNotifyForm(notifyMsg, okTitleBtn, cancelTitleBtn, showCurrentForm, showNextForm string) {
+	modal:= tview.NewModal().
+			SetText(notifyMsg).
+			AddButtons([]string{okTitleBtn, cancelTitleBtn}).
+			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+				if buttonLabel == cancelTitleBtn {
+					g.pages.RemovePage("okCancelNotify").ShowPage(showCurrentForm)
+				} else {
+					g.pages.RemovePage("okCancelNotify").SwitchToPage(showNextForm)
+				}
+			})
+	g.pages.AddAndSwitchToPage("okCancelNotify", modal, true)
+}
+
+func (g *Gui) drawNotifyMsgOkForm(msg string, showCurrentForm string) {
 	modal:= tview.NewModal().
 			SetText(msg).
 			AddButtons([]string{"Ok"}).
 			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 				if buttonLabel == "Ok" {
-					g.pages.RemovePage("notifyMsgOk").ShowPage(showPage)
+					g.pages.RemovePage("notifyMsgOk")
 				}
 			})
-	g.pages.AddAndSwitchToPage("notifyMsgOk", modal, true).ShowPage(showPage)
+	g.pages.AddAndSwitchToPage("notifyMsgOk", modal, true).ShowPage(showCurrentForm)
 }
 
 func (g *Gui) modal(p tview.Primitive, width, height int) tview.Primitive {
@@ -155,8 +100,6 @@ func (g *Gui) modal(p tview.Primitive, width, height int) tview.Primitive {
 
 func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
 	///// Main Layout /////
-
-
 	info := tview.NewTextView() 
 	info.SetBorder(true)
 	info.SetText("Mediaserver Wizard v1.0") 

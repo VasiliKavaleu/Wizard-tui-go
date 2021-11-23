@@ -94,14 +94,13 @@ func (g *Gui) drawServerConfForm() {
 					})
 
 	exit := func() {
-		g.pages.RemovePage(serverFormId).ShowPage("main")
+		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", serverFormId, "main")
+		//g.pages.RemovePage(serverFormId).ShowPage("main")
 	}
 
 	saveServerConf := func() {
 		if g.validateSaveServerConf(form, cnf) {
-			utils.SaveConfigToFile(cnf, serverFilePath)
-			g.drawNotifyMsgOkForm(saveSuccessConfMsg, serverFormId)
-			exit()
+			g.drawSaveServerNotifyForm(cnf)
 		}
 	}
 
@@ -116,9 +115,8 @@ func (g *Gui) drawServerConfForm() {
 		createPage.AddItem(form, 0, 2, true)
 		return createPage
 	}(form)
-
-	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
 	
+	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
 }
 
 
@@ -323,4 +321,21 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 	form.SetCancelFunc(exit)
 
 	g.pages.AddAndSwitchToPage("controllerEvents", g.modal(form, 40, 13), true).ShowPage("serverForm")
+}
+
+
+func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
+	modal:= tview.NewModal().
+			SetText(saveMsg).
+			AddButtons([]string{"Save", "Cancel"}).
+			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+				if buttonLabel == "Cancel" {
+					g.pages.RemovePage("saveServerNotify")
+				} else {
+					g.pages.RemovePage("saveServerNotify")
+					utils.SaveConfigToFile(cnf, serverFilePath)
+					g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
+				}
+			})
+	g.pages.AddAndSwitchToPage("saveServerNotify", modal, true).ShowPage(serverFormId)
 }
