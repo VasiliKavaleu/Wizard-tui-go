@@ -10,7 +10,7 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 	form := tview.NewForm()
 	form.SetBorder(true)
 	form.SetTitleAlign(tview.AlignCenter)
-	form.SetTitle(" API configuration ")
+	form.SetTitle(labelApiForm)
 
 	form.AddInputField(ServerInputLabel["apiListen"], cnf.Api.Listen, inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["apiModule"], cnf.Api.Module, inputWidth, nil, nil)
@@ -35,7 +35,7 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 
 	saveApiConf := func() {
 		if g.validateSaveApiConf(form, cnf) {
-			g.pages.RemovePage("apiForm").ShowPage("main")
+			g.pages.RemovePage(apiFormId)
 		}
 	}
 
@@ -43,7 +43,7 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 		apiUsage := parentForm.GetFormItemByLabel(ServerInputLabel["apiUsage"]).(*tview.DropDown)
 		apiUsage.SetCurrentOption(0)
 		g.app.SetFocus(apiUsage)
-		g.pages.RemovePage("apiForm").ShowPage("main")
+		g.pages.RemovePage(apiFormId)
 	}
 
 	form.AddButton("Ok", saveApiConf)
@@ -51,16 +51,14 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 	form.SetButtonsAlign(tview.AlignRight)
 	form.SetCancelFunc(exit)
 
-	g.pages.AddAndSwitchToPage("apiForm", g.modal(form, 80, 20), true)
+	g.pages.AddAndSwitchToPage(apiFormId, g.modal(form, 80, 20), true)
 
 }
 
 func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	apiListen := form.GetFormItemByLabel(ServerInputLabel["apiListen"]).(*tview.InputField).GetText()
 	apiListen = strings.TrimSpace(apiListen)
-	if utils.ValidReqField(apiListen) {
-		cnf.Api.Listen = apiListen 
-	} else {
+	if !utils.ValidReqField(apiListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["apiListen"])
 		g.drawNotifyMsgOkForm(msg, apiFormId)
 		return false
@@ -68,9 +66,7 @@ func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) boo
 
 	apiModule := form.GetFormItemByLabel(ServerInputLabel["apiModule"]).(*tview.InputField).GetText()
 	apiModule = strings.TrimSpace(apiModule)
-	if utils.ValidReqField(apiModule) {
-		cnf.Api.Module = apiModule 
-	} else {
+	if !utils.ValidReqField(apiModule) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["apiModule"])
 		g.drawNotifyMsgOkForm(msg, apiFormId)
 		return false
@@ -78,9 +74,7 @@ func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) boo
 
 	apiWhitelist := form.GetFormItemByLabel(ServerInputLabel["apiWhitelist"]).(*tview.InputField).GetText()
 	apiWhitelist = strings.TrimSpace(apiWhitelist)
-	if utils.ValidReqField(apiWhitelist) {
-		cnf.Api.Whitelist = utils.StrToList(apiWhitelist) 
-	} else {
+	if !utils.ValidReqField(apiWhitelist) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["apiWhitelist"])
 		g.drawNotifyMsgOkForm(msg, apiFormId)
 		return false
@@ -111,6 +105,10 @@ func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) boo
 			return false
 		}
 	}
+
+	cnf.Api.Listen = apiListen
+	cnf.Api.Module = apiModule
+	cnf.Api.Whitelist = utils.StrToList(apiWhitelist) 
 
 	return true
 }

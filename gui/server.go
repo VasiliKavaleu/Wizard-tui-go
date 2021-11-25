@@ -122,9 +122,7 @@ func (g *Gui) drawServerConfForm() {
 func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	mediaStorages := form.GetFormItemByLabel(ServerInputLabel["mediaStorages"]).(*tview.InputField).GetText()
 	mediaStorages = strings.TrimSpace(mediaStorages)
-	if utils.ValidReqField(mediaStorages) {
-		cnf.Server.Media.Storages = utils.StrToList(mediaStorages)
-	} else {
+	if !utils.ValidReqField(mediaStorages) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaStorages"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -132,29 +130,23 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	mediaThreads := form.GetFormItemByLabel(ServerInputLabel["mediaThreads"]).(*tview.InputField).GetText()
 	mediaThreads = strings.TrimSpace(mediaThreads)
-	if utils.ValidReqField(mediaThreads) {
-		cnf.Server.Media.Threads, _ = strconv.Atoi(mediaThreads)
-	} else {
+	if !utils.ValidReqField(mediaThreads) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
-	}
+	} 
 
 	mediaStreams := form.GetFormItemByLabel(ServerInputLabel["mediaStreams"]).(*tview.InputField).GetText()
 	mediaStreams = strings.TrimSpace(mediaStreams)
-	if utils.ValidReqField(mediaStreams) {
-		cnf.Server.Media.Streams = utils.StrToList(mediaStreams) 
-	} else {
+	if !utils.ValidReqField(mediaStreams) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaStreams"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
-	}
+	} 
 
 	tokenTtl := form.GetFormItemByLabel(ServerInputLabel["tokenTtl"]).(*tview.InputField).GetText()
 	tokenTtl = strings.TrimSpace(tokenTtl)
-	if utils.ValidReqField(tokenTtl) {
-		cnf.Server.Token.Ttl, _ = strconv.Atoi(tokenTtl) 
-	} else {
+	if !utils.ValidReqField(tokenTtl) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["tokenTtl"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -162,9 +154,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	tokenSecret := form.GetFormItemByLabel(ServerInputLabel["tokenSecret"]).(*tview.InputField).GetText()
 	tokenSecret = strings.TrimSpace(tokenSecret)
-	if utils.ValidReqField(tokenTtl) {
-		cnf.Server.Token.Secret = tokenSecret 
-	} else {
+	if !utils.ValidReqField(tokenTtl) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["tokenSecret"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -172,9 +162,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	broadcastWhitelist := form.GetFormItemByLabel(ServerInputLabel["broadcastWhitelist"]).(*tview.InputField).GetText()
 	broadcastWhitelist = strings.TrimSpace(broadcastWhitelist)
-	if utils.ValidReqField(broadcastWhitelist) {
-		cnf.Server.Broadcast.Whitelist = utils.StrToList(broadcastWhitelist) 
-	} else {
+	if !utils.ValidReqField(broadcastWhitelist) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["broadcastWhitelist"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -182,30 +170,23 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	webThreads := form.GetFormItemByLabel(ServerInputLabel["webThreads"]).(*tview.InputField).GetText()
 	webThreads = strings.TrimSpace(webThreads)
-	if utils.ValidReqField(webThreads) {
-		cnf.Server.Broadcast.Web.Listen = webThreads 
-	} else {
+	if !utils.ValidReqField(webThreads) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["webThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
+		return false 
 	}
-
 
 	webListen := form.GetFormItemByLabel(ServerInputLabel["webListen"]).(*tview.InputField).GetText()
 	webListen = strings.TrimSpace(webListen)
-	if utils.ValidReqField(webListen) {
-		cnf.Server.Broadcast.Web.Listen = webListen 
-	} else {
+	if !utils.ValidReqField(webListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["webListen"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
+		return false 
 	}
 
 	rtspThreads := form.GetFormItemByLabel(ServerInputLabel["rtspThreads"]).(*tview.InputField).GetText()
 	rtspThreads = strings.TrimSpace(rtspThreads)
-	if utils.ValidReqField(rtspThreads) {
-		cnf.Server.Broadcast.Rtsp.Threads, _ = strconv.Atoi(rtspThreads) 
-	} else {
+	if !utils.ValidReqField(rtspThreads) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["rtspThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -213,9 +194,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	rtspListen := form.GetFormItemByLabel(ServerInputLabel["rtspListen"]).(*tview.InputField).GetText()
 	rtspListen = strings.TrimSpace(rtspListen)
-	if utils.ValidReqField(rtspListen) {
-		cnf.Server.Broadcast.Rtsp.Listen = rtspListen 
-	} else {
+	if !utils.ValidReqField(rtspListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["rtspListen"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -223,9 +202,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	publishThreads := form.GetFormItemByLabel(ServerInputLabel["publishThreads"]).(*tview.InputField).GetText()
 	publishThreads = strings.TrimSpace(publishThreads)
-	if utils.ValidReqField(publishThreads) {
-		cnf.Server.Broadcast.Publish.Threads, _ = strconv.Atoi(publishThreads) 
-	} else {
+	if !utils.ValidReqField(publishThreads) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["publishThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -234,9 +211,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	publishListen := form.GetFormItemByLabel(ServerInputLabel["publishListen"]).(*tview.InputField).GetText()
 	publishListen = strings.TrimSpace(publishListen)
 
-	if utils.ValidReqField(publishListen) {
-		cnf.Server.Broadcast.Publish.Listen = publishListen 
-	} else {
+	if !utils.ValidReqField(publishListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["publishListen"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
@@ -260,6 +235,21 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 		cnf.Cluster = utils.Cluster{}
 	}
 
+	cnf.Server.Media.Storages = utils.StrToList(mediaStorages)
+	cnf.Server.Media.Threads, _ = strconv.Atoi(mediaThreads)
+	cnf.Server.Media.Streams = utils.StrToList(mediaStreams)
+
+	cnf.Server.Token.Ttl, _ = strconv.Atoi(tokenTtl)
+	cnf.Server.Token.Secret = tokenSecret
+	
+	cnf.Server.Broadcast.Whitelist = utils.StrToList(broadcastWhitelist)
+	cnf.Server.Broadcast.Web.Listen = webThreads
+	cnf.Server.Broadcast.Web.Listen = webListen
+	cnf.Server.Broadcast.Rtsp.Threads, _ = strconv.Atoi(rtspThreads)
+	cnf.Server.Broadcast.Rtsp.Listen = rtspListen
+	cnf.Server.Broadcast.Publish.Threads, _ = strconv.Atoi(publishThreads)
+	cnf.Server.Broadcast.Publish.Listen = publishListen
+
 	return true
 }
 
@@ -268,7 +258,7 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 	form := tview.NewForm()
 	form.SetBorder(true)
 	form.SetTitleAlign(tview.AlignCenter)
-	form.SetTitle("Choose controller events")
+	form.SetTitle(" Choose controller events ")
 	events := map[string]bool{}
 
 	form.AddCheckbox(controllerEventsOptions[0], false, func(checked bool){
@@ -302,7 +292,7 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 	
 	exit := func() {
 		eventsList := []string{}
-		for key, _ := range events {
+		for key := range events {
 			eventsList = append(eventsList, key)
 		}
 		cnf.Controller.Events = eventsList

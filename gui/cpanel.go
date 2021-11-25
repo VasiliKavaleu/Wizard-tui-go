@@ -10,7 +10,7 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 	form := tview.NewForm()
 	form.SetBorder(true)
 	form.SetTitleAlign(tview.AlignCenter)
-	form.SetTitle(" Cpanel configuration ")
+	form.SetTitle(labelCpanelForm)
 
 	form.AddInputField(ServerInputLabel["cpanelListen"], cnf.Cpanel.Listen, inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["cpanelModule"], cnf.Cpanel.Module, inputWidth, nil, nil)
@@ -37,7 +37,7 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 
 	saveCpanelConf := func() {
 		if g.validateSaveCpanelConf(form, cnf) {
-			g.pages.RemovePage(cpanelFormId).ShowPage("main")
+			g.pages.RemovePage(cpanelFormId)
 		}
 	}
 	
@@ -45,7 +45,7 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 		cpanelUsage := parentForm.GetFormItemByLabel(ServerInputLabel["cpanelUsage"]).(*tview.DropDown)
 		cpanelUsage.SetCurrentOption(0)
 		g.app.SetFocus(cpanelUsage)
-		g.pages.RemovePage(cpanelFormId).ShowPage("main")
+		g.pages.RemovePage(cpanelFormId)
 	}
 
 	form.AddButton("Ok", saveCpanelConf)
@@ -60,19 +60,15 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	cpanelListen := form.GetFormItemByLabel(ServerInputLabel["cpanelListen"]).(*tview.InputField).GetText()
 	cpanelListen = strings.TrimSpace(cpanelListen)
-	if utils.ValidReqField(cpanelListen) {
-		cnf.Cpanel.Listen = cpanelListen 
-	} else {
+	if !utils.ValidReqField(cpanelListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelListen"])
 		g.drawNotifyMsgOkForm(msg, apiFormId)
-		return false
+		return false 
 	}
 
 	cpanelModule := form.GetFormItemByLabel(ServerInputLabel["cpanelModule"]).(*tview.InputField).GetText()
 	cpanelModule = strings.TrimSpace(cpanelModule)
 	if utils.ValidReqField(cpanelModule) {
-		cnf.Cpanel.Module = cpanelModule 
-	} else {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelModule"])
 		g.drawNotifyMsgOkForm(msg, apiFormId)
 		return false
@@ -81,11 +77,9 @@ func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) 
 	cpanelWhitelist := form.GetFormItemByLabel(ServerInputLabel["cpanelWhitelist"]).(*tview.InputField).GetText()
 	cpanelWhitelist = strings.TrimSpace(cpanelWhitelist)
 	if utils.ValidReqField(cpanelWhitelist) {
-		cnf.Cpanel.Whitelist = utils.StrToList(cpanelWhitelist) 
-	} else {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelWhitelist"])
 		g.drawNotifyMsgOkForm(msg, cpanelFormId)
-		return false
+		return false	 
 	}
 
 	if cnf.Cpanel.Auth == "" {
@@ -134,6 +128,10 @@ func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) 
 		}
 
 	}
+
+	cnf.Cpanel.Listen = cpanelListen
+	cnf.Cpanel.Module = cpanelModule
+	cnf.Cpanel.Whitelist = utils.StrToList(cpanelWhitelist)
 
 	return true
 }

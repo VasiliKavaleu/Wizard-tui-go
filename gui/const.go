@@ -11,6 +11,14 @@ var (
 
 	// form labes
 	labelServerForm = " Fill out server configuration form "
+	labelApiForm = " API configuration "
+	labelCpanelForm = " Cpanel configuration "
+
+	menuLabes = map[string]string{
+		"createServer": "Create server configuration",
+		"changeServer": "Change server configuration",
+		"exit": "Quit",
+	}
 
 	// form id
 	serverFormId = "serverForm"

@@ -32,12 +32,12 @@ func (g *Gui) Start() error {
 func (g *Gui) initMenu() {
 	g.menuList = createCommandList()
 
-	g.menuList.AddItem("Create server configuration", "", '1', func(){
+	g.menuList.AddItem(menuLabes["createServer"], "", '1', func(){
 		g.editServer = false
 		g.drawServerConfForm()
 	})
 	
-	g.menuList.AddItem("Quit", "", 'q', g.drawQuitNotifyForm)
+	g.menuList.AddItem(menuLabes["exit"], "", 'q', g.drawQuitNotifyForm)
 	g.addChangeServerMenuItem()
 
 	layout := createMainLayout(g.menuList)
@@ -48,10 +48,12 @@ func (g *Gui) initMenu() {
 
 func (g *Gui) addChangeServerMenuItem() {
 	if _, err := os.Stat(serverFilePath); err == nil {
-		g.menuList.InsertItem(1, "Change server configuration", "", '2', func(){
-			g.editServer = true
-			g.drawServerConfForm()
-		})
+		if g.menuList.GetItemCount() == 2 {
+			g.menuList.InsertItem(1, menuLabes["changeServer"], "", '2', func(){
+				g.editServer = true
+				g.drawServerConfForm()
+			})
+		}
 	  }
 }
 
