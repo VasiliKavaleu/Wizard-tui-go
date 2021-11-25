@@ -10,6 +10,7 @@ type Gui struct {
 	app   *tview.Application
 	pages *tview.Pages
 	editServer bool
+	menuList *tview.List
 }
 
 func New() *Gui {
@@ -29,25 +30,29 @@ func (g *Gui) Start() error {
 }
 
 func (g *Gui) initMenu() {
-	commandList := createCommandList()
+	g.menuList = createCommandList()
 
-	commandList.AddItem("Create server configuration", "", '1', func(){
+	g.menuList.AddItem("Create server configuration", "", '1', func(){
 		g.editServer = false
 		g.drawServerConfForm()
 	})
 	
-	commandList.AddItem("Quit", "", 'q', g.drawQuitNotifyForm)
+	g.menuList.AddItem("Quit", "", 'q', g.drawQuitNotifyForm)
+	g.addChangeServerMenuItem()
+
+	layout := createMainLayout(g.menuList)
+
+	g.pages = tview.NewPages().AddAndSwitchToPage("main", layout, true)
+	g.app.SetRoot(g.pages, true)
+}
+
+func (g *Gui) addChangeServerMenuItem() {
 	if _, err := os.Stat(serverFilePath); err == nil {
-		commandList.InsertItem(1, "Change server configuration", "", '2', func(){
+		g.menuList.InsertItem(1, "Change server configuration", "", '2', func(){
 			g.editServer = true
 			g.drawServerConfForm()
 		})
 	  }
-
-	layout := createMainLayout(commandList)
-
-	g.pages = tview.NewPages().AddAndSwitchToPage("main", layout, true)
-	g.app.SetRoot(g.pages, true)
 }
 
 func (g *Gui) drawQuitNotifyForm() {

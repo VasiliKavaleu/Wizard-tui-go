@@ -95,7 +95,6 @@ func (g *Gui) drawServerConfForm() {
 
 	exit := func() {
 		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", serverFormId, "main")
-		//g.pages.RemovePage(serverFormId).ShowPage("main")
 	}
 
 	saveServerConf := func() {
@@ -115,7 +114,7 @@ func (g *Gui) drawServerConfForm() {
 		createPage.AddItem(form, 0, 2, true)
 		return createPage
 	}(form)
-	
+
 	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
 }
 
@@ -234,6 +233,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	publishListen := form.GetFormItemByLabel(ServerInputLabel["publishListen"]).(*tview.InputField).GetText()
 	publishListen = strings.TrimSpace(publishListen)
+
 	if utils.ValidReqField(publishListen) {
 		cnf.Server.Broadcast.Publish.Listen = publishListen 
 	} else {
@@ -259,8 +259,6 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	if !cnf.Cluster.Enable {
 		cnf.Cluster = utils.Cluster{}
 	}
-
-
 
 	return true
 }
@@ -334,6 +332,7 @@ func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
 				} else {
 					g.pages.RemovePage("saveServerNotify")
 					utils.SaveConfigToFile(cnf, serverFilePath)
+					g.addChangeServerMenuItem()
 					g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
 				}
 			})
