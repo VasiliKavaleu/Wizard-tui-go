@@ -24,6 +24,7 @@ var (
 	serverFormId = "serverForm"
 	apiFormId = "apiForm"
 	cpanelFormId = "cpanelForm"
+	clusterFormId = "clusterForm"
 
 	// initial values
 	usageDropDownOptions = []string{"Disable", "Enable"}
@@ -78,7 +79,7 @@ var (
 		"cpanelUsersGuest": "Password for guest",
 	
 		"clusterUsage": "Cluster usage",
-		"clusterId": "Cluster usage",
+		"clusterId": "Cluster ID",
 		"clusterNode": "Cluster node",
 		"clusterPool": "Cluster pool",
 		"clusterWarmingUp": "Warming up time",

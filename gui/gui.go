@@ -85,7 +85,7 @@ func (g *Gui) drawOkCancelNotifyForm(notifyMsg, okTitleBtn, cancelTitleBtn, show
 	g.pages.AddAndSwitchToPage("okCancelNotify", modal, true)
 }
 
-func (g *Gui) drawNotifyMsgOkForm(msg string, showCurrentForm string) {
+func (g *Gui) drawNotifyMsgOkForm(msg string, whichFormShow string) {
 	modal:= tview.NewModal().
 			SetText(msg).
 			AddButtons([]string{"Ok"}).
@@ -94,7 +94,7 @@ func (g *Gui) drawNotifyMsgOkForm(msg string, showCurrentForm string) {
 					g.pages.RemovePage("notifyMsgOk")
 				}
 			})
-	g.pages.AddAndSwitchToPage("notifyMsgOk", modal, true).ShowPage(showCurrentForm)
+	g.pages.AddAndSwitchToPage("notifyMsgOk", modal, true).ShowPage(whichFormShow)
 }
 
 func (g *Gui) modal(p tview.Primitive, width, height int) tview.Primitive {

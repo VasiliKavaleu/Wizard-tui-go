@@ -241,7 +241,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 
 	cnf.Server.Token.Ttl, _ = strconv.Atoi(tokenTtl)
 	cnf.Server.Token.Secret = tokenSecret
-	
+
 	cnf.Server.Broadcast.Whitelist = utils.StrToList(broadcastWhitelist)
 	cnf.Server.Broadcast.Web.Listen = webThreads
 	cnf.Server.Broadcast.Web.Listen = webListen
@@ -327,4 +327,13 @@ func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
 				}
 			})
 	g.pages.AddAndSwitchToPage("saveServerNotify", modal, true).ShowPage(serverFormId)
+}
+
+func (g *Gui) checkAndNotifyRequiredField(inputValue, inputLabel, whichFormShow string) bool {
+	if !utils.ValidReqField(inputValue) {
+		msg := utils.GetReqFieldMsg(inputLabel)
+		g.drawNotifyMsgOkForm(msg, whichFormShow)
+		return false
+	}
+	return true
 }
