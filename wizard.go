@@ -2,12 +2,11 @@ package main
 
 import (
 	"configurator/gui"
-	"github.com/rivo/tview"
 	"github.com/gdamore/tcell/v2"
-    "log"
+	"github.com/rivo/tview"
+	"log"
 	"os"
 )
-
 
 func run() int {
 

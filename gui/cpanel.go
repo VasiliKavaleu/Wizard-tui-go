@@ -1,8 +1,8 @@
 package gui
 
 import (
-	"github.com/rivo/tview"
 	"configurator/utils"
+	"github.com/rivo/tview"
 	"strings"
 )
 
@@ -15,20 +15,20 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 	form.AddInputField(ServerInputLabel["cpanelListen"], cnf.Cpanel.Listen, inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["cpanelModule"], cnf.Cpanel.Module, inputWidth, nil, nil)
 
-	form.AddDropDown(ServerInputLabel["cpanelSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cpanel.Ssl), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Cpanel.Ssl = true
-						} else {
-							cnf.Cpanel.Ssl = false
-						}
-					})
+	form.AddDropDown(ServerInputLabel["cpanelSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cpanel.Ssl),
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Cpanel.Ssl = true
+			} else {
+				cnf.Cpanel.Ssl = false
+			}
+		})
 
 	form.AddInputField(ServerInputLabel["cpanelWhitelist"], utils.ListToStr(cnf.Cpanel.Whitelist), inputWidth, nil, nil)
-	form.AddDropDown(ServerInputLabel["cpanelAuth"], cpanelAuthDropDownOptions, utils.GetIndexFromVal(cpanelAuthDropDownOptions, cnf.Cpanel.Auth), 
-					func(option string, optionIndex int){
-						cnf.Cpanel.Auth = option
-					})
+	form.AddDropDown(ServerInputLabel["cpanelAuth"], cpanelAuthDropDownOptions, utils.GetIndexFromVal(cpanelAuthDropDownOptions, cnf.Cpanel.Auth),
+		func(option string, optionIndex int) {
+			cnf.Cpanel.Auth = option
+		})
 
 	form.AddPasswordField(ServerInputLabel["cpanelUsersAdmin"], cnf.Cpanel.Users.Admin, inputWidth, passwordMask, nil)
 	form.AddPasswordField(ServerInputLabel["cpanelUsersRoot"], cnf.Cpanel.Users.Root, inputWidth, passwordMask, nil)
@@ -40,7 +40,7 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 			g.pages.RemovePage(cpanelFormId)
 		}
 	}
-	
+
 	exit := func() {
 		cpanelUsage := parentForm.GetFormItemByLabel(ServerInputLabel["cpanelUsage"]).(*tview.DropDown)
 		cpanelUsage.SetCurrentOption(0)
@@ -67,8 +67,8 @@ func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) 
 	cpanelWhitelist = strings.TrimSpace(cpanelWhitelist)
 
 	if g.checkAndNotifyRequiredField(cpanelListen, ServerInputLabel["cpanelListen"], cpanelFormId) &&
-	g.checkAndNotifyRequiredField(cpanelModule, ServerInputLabel["cpanelModule"], cpanelFormId) &&
-	g.checkAndNotifyRequiredField(cpanelWhitelist, ServerInputLabel["cpanelWhitelist"], cpanelFormId) {
+		g.checkAndNotifyRequiredField(cpanelModule, ServerInputLabel["cpanelModule"], cpanelFormId) &&
+		g.checkAndNotifyRequiredField(cpanelWhitelist, ServerInputLabel["cpanelWhitelist"], cpanelFormId) {
 		cnf.Cpanel.Listen = cpanelListen
 		cnf.Cpanel.Module = cpanelModule
 		cnf.Cpanel.Whitelist = utils.StrToList(cpanelWhitelist)
@@ -88,9 +88,9 @@ func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) 
 		cpanelUsersGuest = strings.TrimSpace(cpanelUsersGuest)
 
 		if g.checkAndNotifyRequiredField(cpanelUsersAdmin, ServerInputLabel["cpanelUsersAdmin"], cpanelFormId) &&
-		g.checkAndNotifyRequiredField(cpanelUsersRoot, ServerInputLabel["cpanelUsersRoot"], cpanelFormId) &&
-		g.checkAndNotifyRequiredField(cpanelUsersUser, ServerInputLabel["cpanelUsersUser"], cpanelFormId) &&
-		g.checkAndNotifyRequiredField(cpanelUsersGuest, ServerInputLabel["cpanelUsersGuest"], cpanelFormId) {
+			g.checkAndNotifyRequiredField(cpanelUsersRoot, ServerInputLabel["cpanelUsersRoot"], cpanelFormId) &&
+			g.checkAndNotifyRequiredField(cpanelUsersUser, ServerInputLabel["cpanelUsersUser"], cpanelFormId) &&
+			g.checkAndNotifyRequiredField(cpanelUsersGuest, ServerInputLabel["cpanelUsersGuest"], cpanelFormId) {
 			cnf.Cpanel.Users.Admin = cpanelUsersAdmin
 			cnf.Cpanel.Users.Root = cpanelUsersRoot
 			cnf.Cpanel.Users.User = cpanelUsersUser

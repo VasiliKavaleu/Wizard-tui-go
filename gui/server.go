@@ -3,10 +3,10 @@ package gui
 import (
 	"configurator/utils"
 	"github.com/rivo/tview"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
 	"strconv"
 	"strings"
-	"io/ioutil"
-	"gopkg.in/yaml.v3"
 )
 
 // Main form consisting all input field and DropDown filds for moving other forms
@@ -16,12 +16,10 @@ func (g *Gui) drawServerConfForm() {
 	if g.editServer {
 		yfile, _ := ioutil.ReadFile(serverFilePath)
 		_ = yaml.Unmarshal(yfile, &initialCnf)
-		
-		
-	} 
-	
-	cnf := &initialCnf
 
+	}
+
+	cnf := &initialCnf
 
 	form := tview.NewForm()
 
@@ -31,14 +29,14 @@ func (g *Gui) drawServerConfForm() {
 	form.AddInputField(ServerInputLabel["tokenTtl"], strconv.Itoa(cnf.Server.Token.Ttl), inputWidth, utils.ValidInt, nil)
 	form.AddInputField(ServerInputLabel["tokenSecret"], cnf.Server.Token.Secret, inputWidth, nil, nil)
 
-	form.AddDropDown(ServerInputLabel["broadcastSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Server.Broadcast.Ssl), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Server.Broadcast.Ssl = true
-						} else {
-							cnf.Server.Broadcast.Ssl = false
-						}
-					})
+	form.AddDropDown(ServerInputLabel["broadcastSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Server.Broadcast.Ssl),
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Server.Broadcast.Ssl = true
+			} else {
+				cnf.Server.Broadcast.Ssl = false
+			}
+		})
 
 	form.AddInputField(ServerInputLabel["broadcastWhitelist"], utils.ListToStr(cnf.Server.Broadcast.Whitelist), inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["webThreads"], strconv.Itoa(cnf.Server.Broadcast.Web.Threads), inputWidth, utils.ValidInt, nil)
@@ -48,19 +46,18 @@ func (g *Gui) drawServerConfForm() {
 	form.AddInputField(ServerInputLabel["publishThreads"], strconv.Itoa(cnf.Server.Broadcast.Publish.Threads), inputWidth, utils.ValidInt, nil)
 	form.AddInputField(ServerInputLabel["publishListen"], cnf.Server.Broadcast.Publish.Listen, inputWidth, nil, nil)
 
-	form.AddInputField(ServerInputLabel["controllerEvents"], utils.ListToStr(cnf.Controller.Events), inputWidth, nil, func(text string){
+	form.AddInputField(ServerInputLabel["controllerEvents"], utils.ListToStr(cnf.Controller.Events), inputWidth, nil, func(text string) {
 		g.drawcontrollerEventsForm(form, cnf)
 	})
 
-	form.AddDropDown(ServerInputLabel["controllerDsn"], controllerDsnOptions, utils.GetIndexFromVal(controllerDsnOptions, cnf.Controller.Dsn), 
-					func(option string, optionIndex int){
-							cnf.Controller.Dsn = option
-					})
+	form.AddDropDown(ServerInputLabel["controllerDsn"], controllerDsnOptions, utils.GetIndexFromVal(controllerDsnOptions, cnf.Controller.Dsn),
+		func(option string, optionIndex int) {
+			cnf.Controller.Dsn = option
+		})
 
 	form.AddDropDown(ServerInputLabel["apiUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Api.Enable), nil)
 	form.AddDropDown(ServerInputLabel["cpanelUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cpanel.Enable), nil)
 	form.AddDropDown(ServerInputLabel["clusterUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cluster.Enable), nil)
-
 
 	exit := func() {
 		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", serverFormId, "main")
@@ -72,10 +69,10 @@ func (g *Gui) drawServerConfForm() {
 		}
 	}
 
-	form.AddButton("Save", saveServerConf)                                         
-	form.AddButton("Cancel", exit)                                
-	form.SetCancelFunc(exit)                                      
-	form.SetButtonsAlign(tview.AlignRight) 							
+	form.AddButton("Save", saveServerConf)
+	form.AddButton("Cancel", exit)
+	form.SetCancelFunc(exit)
+	form.SetButtonsAlign(tview.AlignRight)
 	form.SetBorder(true).SetTitle(labelServerForm)
 
 	g.addPopUpHandler(cnf, form)
@@ -92,7 +89,7 @@ func (g *Gui) drawServerConfForm() {
 // addPopUpHandler adds handler to some DropDown field which show forms depending on input value
 func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
 	apiUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["apiUsage"]).(*tview.DropDown)
-	apiUsageDropDown.SetSelectedFunc(func(text string, index int){
+	apiUsageDropDown.SetSelectedFunc(func(text string, index int) {
 		if index != 0 {
 			cnf.Api.Enable = true
 			g.drawApiConfForm(cnf, form)
@@ -102,7 +99,7 @@ func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
 	})
 
 	cpanelUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["cpanelUsage"]).(*tview.DropDown)
-	cpanelUsageDropDown.SetSelectedFunc(func(text string, index int){
+	cpanelUsageDropDown.SetSelectedFunc(func(text string, index int) {
 		if index != 0 {
 			cnf.Cpanel.Enable = true
 			g.drawCpanelConfForm(cnf, form)
@@ -112,7 +109,7 @@ func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
 	})
 
 	clusterUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["clusterUsage"]).(*tview.DropDown)
-	clusterUsageDropDown.SetSelectedFunc(func(text string, index int){
+	clusterUsageDropDown.SetSelectedFunc(func(text string, index int) {
 		if index != 0 {
 			cnf.Cluster.Enable = true
 			g.drawClusterConfForm(cnf, form)
@@ -121,7 +118,6 @@ func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
 		}
 	})
 }
-
 
 func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	mediaStorages := form.GetFormItemByLabel(ServerInputLabel["mediaStorages"]).(*tview.InputField).GetText()
@@ -138,7 +134,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
-	} 
+	}
 
 	mediaStreams := form.GetFormItemByLabel(ServerInputLabel["mediaStreams"]).(*tview.InputField).GetText()
 	mediaStreams = strings.TrimSpace(mediaStreams)
@@ -146,7 +142,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaStreams"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
 		return false
-	} 
+	}
 
 	tokenTtl := form.GetFormItemByLabel(ServerInputLabel["tokenTtl"]).(*tview.InputField).GetText()
 	tokenTtl = strings.TrimSpace(tokenTtl)
@@ -177,7 +173,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	if !utils.ValidReqField(webThreads) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["webThreads"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false 
+		return false
 	}
 
 	webListen := form.GetFormItemByLabel(ServerInputLabel["webListen"]).(*tview.InputField).GetText()
@@ -185,7 +181,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	if !utils.ValidReqField(webListen) {
 		msg := utils.GetReqFieldMsg(ServerInputLabel["webListen"])
 		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false 
+		return false
 	}
 
 	rtspThreads := form.GetFormItemByLabel(ServerInputLabel["rtspThreads"]).(*tview.InputField).GetText()
@@ -257,7 +253,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	return true
 }
 
-// form reflecting checkboxes 
+// form reflecting checkboxes
 func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.ServerConfig) {
 	form := tview.NewForm()
 	form.SetBorder(true)
@@ -265,35 +261,35 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 	form.SetTitle(" Choose controller events ")
 	events := map[string]bool{}
 
-	form.AddCheckbox(controllerEventsOptions[0], false, func(checked bool){
+	form.AddCheckbox(controllerEventsOptions[0], false, func(checked bool) {
 		if checked {
 			events[controllerEventsOptions[0]] = checked
 		} else {
 			delete(events, controllerEventsOptions[0])
 		}
-	})		
-	form.AddCheckbox(controllerEventsOptions[1], false, func(checked bool){
+	})
+	form.AddCheckbox(controllerEventsOptions[1], false, func(checked bool) {
 		if checked {
 			events[controllerEventsOptions[1]] = checked
 		} else {
 			delete(events, controllerEventsOptions[1])
 		}
 	})
-	form.AddCheckbox(controllerEventsOptions[2], false, func(checked bool){
+	form.AddCheckbox(controllerEventsOptions[2], false, func(checked bool) {
 		if checked {
 			events[controllerEventsOptions[2]] = checked
 		} else {
 			delete(events, controllerEventsOptions[2])
 		}
 	})
-	form.AddCheckbox(controllerEventsOptions[3], false, func(checked bool){
+	form.AddCheckbox(controllerEventsOptions[3], false, func(checked bool) {
 		if checked {
 			events[controllerEventsOptions[3]] = checked
 		} else {
 			delete(events, controllerEventsOptions[3])
 		}
 	})
-	
+
 	exit := func() {
 		eventsList := []string{}
 		for key := range events {
@@ -317,23 +313,23 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 
 // Form for confirmation of saving the main form
 func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
-	modal:= tview.NewModal().
-			SetText(saveMsg).
-			AddButtons([]string{"Save", "Cancel"}).
-			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-				if buttonLabel == "Cancel" {
-					g.pages.RemovePage("saveServerNotify")
-				} else {
-					g.pages.RemovePage("saveServerNotify")
-					utils.SaveConfigToFile(cnf, serverFilePath)
-					g.addChangeServerMenuItem()
-					g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
-				}
-			})
+	modal := tview.NewModal().
+		SetText(saveMsg).
+		AddButtons([]string{"Save", "Cancel"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			if buttonLabel == "Cancel" {
+				g.pages.RemovePage("saveServerNotify")
+			} else {
+				g.pages.RemovePage("saveServerNotify")
+				utils.SaveConfigToFile(cnf, serverFilePath)
+				g.addChangeServerMenuItem()
+				g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
+			}
+		})
 	g.pages.AddAndSwitchToPage("saveServerNotify", modal, true).ShowPage(serverFormId)
 }
 
-// Verification notification form of mandatory field 
+// Verification notification form of mandatory field
 func (g *Gui) checkAndNotifyRequiredField(inputValue, inputLabel, whichFormShow string) bool {
 	if !utils.ValidReqField(inputValue) {
 		msg := utils.GetReqFieldMsg(inputLabel)

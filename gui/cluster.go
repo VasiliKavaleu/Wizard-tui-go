@@ -1,8 +1,8 @@
 package gui
 
 import (
-	"github.com/rivo/tview"
 	"configurator/utils"
+	"github.com/rivo/tview"
 	"strconv"
 	"strings"
 )
@@ -42,7 +42,6 @@ func (g *Gui) drawClusterConfForm(cnf *utils.ServerConfig, parentForm *tview.For
 	g.pages.AddAndSwitchToPage(clusterFormId, g.modal(form, 80, 20), true)
 }
 
-
 func (g *Gui) validateSaveClusterConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	clusterId := form.GetFormItemByLabel(ServerInputLabel["clusterId"]).(*tview.InputField).GetText()
 	clusterNode := form.GetFormItemByLabel(ServerInputLabel["clusterNode"]).(*tview.InputField).GetText()
@@ -59,11 +58,11 @@ func (g *Gui) validateSaveClusterConf(form *tview.Form, cnf *utils.ServerConfig)
 	clusterInterval = strings.TrimSpace(clusterInterval)
 
 	if g.checkAndNotifyRequiredField(clusterId, ServerInputLabel["clusterId"], clusterFormId) &&
-	g.checkAndNotifyRequiredField(clusterNode, ServerInputLabel["clusterNode"], clusterFormId) &&
-	g.checkAndNotifyRequiredField(clusterPool, ServerInputLabel["clusterPool"], clusterFormId) &&
-	g.checkAndNotifyRequiredField(clusterWarmingUp, ServerInputLabel["clusterWarmingUp"], clusterFormId) &&
-	g.checkAndNotifyRequiredField(clusterRetries, ServerInputLabel["clusterRetries"], clusterFormId) &&
-	g.checkAndNotifyRequiredField(clusterInterval, ServerInputLabel["clusterInterval"], clusterFormId){
+		g.checkAndNotifyRequiredField(clusterNode, ServerInputLabel["clusterNode"], clusterFormId) &&
+		g.checkAndNotifyRequiredField(clusterPool, ServerInputLabel["clusterPool"], clusterFormId) &&
+		g.checkAndNotifyRequiredField(clusterWarmingUp, ServerInputLabel["clusterWarmingUp"], clusterFormId) &&
+		g.checkAndNotifyRequiredField(clusterRetries, ServerInputLabel["clusterRetries"], clusterFormId) &&
+		g.checkAndNotifyRequiredField(clusterInterval, ServerInputLabel["clusterInterval"], clusterFormId) {
 		cnf.Cluster.Id, _ = strconv.Atoi(clusterId)
 		cnf.Cluster.Node, _ = strconv.Atoi(clusterNode)
 		if pool, err := utils.ConvToListOfIntStrDict(clusterPool); err == nil {

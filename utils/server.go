@@ -1,23 +1,22 @@
 package utils
 
-
 type ServerConfig struct {
-	Server Server `yaml:"server"`
+	Server     Server `yaml:"server"`
 	Controller Controller
-	Api Api
-	Cpanel Cpanel
-	Cluster Cluster
+	Api        Api
+	Cpanel     Cpanel
+	Cluster    Cluster
 }
 
 type Media struct {
-	Storages  []string
-	Threads int
-	Streams []string
+	Storages []string
+	Threads  int
+	Streams  []string
 }
 
 type Token struct {
-	Secret  string
-	Ttl int
+	Secret string
+	Ttl    int
 }
 
 type Web struct {
@@ -36,66 +35,66 @@ type Rtsp struct {
 }
 
 type Broadcast struct {
-	Ssl  bool
+	Ssl       bool
 	Whitelist []string
-	Web Web
-	Publish Publish
-	Rtsp Rtsp
+	Web       Web
+	Publish   Publish
+	Rtsp      Rtsp
 }
 
 type ApiUsers struct {
 	Admin string
-	Root string
+	Root  string
 }
 
 type CpanelUsers struct {
 	Admin string
-	Root string
-	User string
+	Root  string
+	User  string
 	Guest string
 }
 
 type Api struct {
-	Enable bool
-	Listen string
-	Module string
-	Ssl bool
+	Enable    bool
+	Listen    string
+	Module    string
+	Ssl       bool
 	Whitelist []string
-	Auth  string
-	Users ApiUsers
+	Auth      string
+	Users     ApiUsers
 }
 
 type Cpanel struct {
-	Enable bool
-	Listen string
-	Module string
-	Ssl bool
+	Enable    bool
+	Listen    string
+	Module    string
+	Ssl       bool
 	Whitelist []string
-	Auth  string
-	Users CpanelUsers
+	Auth      string
+	Users     CpanelUsers
 }
 
 type Healthcheck struct {
 	WarmingUp string `yaml:"warming-up"`
-	Retries int `yaml:"retries"`
-	Interval string `yaml:"interval"`
+	Retries   int    `yaml:"retries"`
+	Interval  string `yaml:"interval"`
 }
 
 type Cluster struct {
-	Enable bool
-	Id int
-	Node int
-	Pool []map[int]string
-	Healthcheck  `yaml:"healthcheck"`
+	Enable      bool
+	Id          int
+	Node        int
+	Pool        []map[int]string
+	Healthcheck `yaml:"healthcheck"`
 }
 
 type Controller struct {
-	Dsn string
+	Dsn    string
 	Events []string
 }
 
 type Server struct {
-	Media Media `yaml:"media"`
-	Token Token `yaml:"token"`
+	Media     Media `yaml:"media"`
+	Token     Token `yaml:"token"`
 	Broadcast Broadcast
 }

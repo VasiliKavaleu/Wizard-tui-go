@@ -1,8 +1,8 @@
 package gui
 
 import (
-	"github.com/rivo/tview"
 	"configurator/utils"
+	"github.com/rivo/tview"
 	"strings"
 )
 
@@ -15,21 +15,21 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 	form.AddInputField(ServerInputLabel["apiListen"], cnf.Api.Listen, inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["apiModule"], cnf.Api.Module, inputWidth, nil, nil)
 
-	form.AddDropDown(ServerInputLabel["apiSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Api.Ssl), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Api.Ssl = true
-						} else {
-							cnf.Api.Ssl = false
-						}
-					})
+	form.AddDropDown(ServerInputLabel["apiSsl"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Api.Ssl),
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Api.Ssl = true
+			} else {
+				cnf.Api.Ssl = false
+			}
+		})
 
 	form.AddInputField(ServerInputLabel["apiWhitelist"], utils.ListToStr(cnf.Api.Whitelist), inputWidth, nil, nil)
 
-	form.AddDropDown(ServerInputLabel["apiAuth"], apiAuthDropDownOptions, utils.GetIndexFromVal(apiAuthDropDownOptions, cnf.Api.Auth), 
-					func(option string, optionIndex int){
-						cnf.Api.Auth = option
-					})
+	form.AddDropDown(ServerInputLabel["apiAuth"], apiAuthDropDownOptions, utils.GetIndexFromVal(apiAuthDropDownOptions, cnf.Api.Auth),
+		func(option string, optionIndex int) {
+			cnf.Api.Auth = option
+		})
 
 	form.AddPasswordField(ServerInputLabel["apiUsersAdmin"], cnf.Api.Users.Admin, inputWidth, passwordMask, nil)
 	form.AddPasswordField(ServerInputLabel["apiUsersRoot"], cnf.Api.Users.Root, inputWidth, passwordMask, nil)
@@ -66,16 +66,16 @@ func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) boo
 	apiWhitelist = strings.TrimSpace(apiWhitelist)
 
 	if g.checkAndNotifyRequiredField(apiListen, ServerInputLabel["apiListen"], apiFormId) &&
-	g.checkAndNotifyRequiredField(apiModule, ServerInputLabel["apiModule"], apiFormId) &&
-	g.checkAndNotifyRequiredField(apiWhitelist, ServerInputLabel["apiWhitelist"], apiFormId) {
+		g.checkAndNotifyRequiredField(apiModule, ServerInputLabel["apiModule"], apiFormId) &&
+		g.checkAndNotifyRequiredField(apiWhitelist, ServerInputLabel["apiWhitelist"], apiFormId) {
 		cnf.Api.Listen = apiListen
 		cnf.Api.Module = apiModule
-		cnf.Api.Whitelist = utils.StrToList(apiWhitelist) 
+		cnf.Api.Whitelist = utils.StrToList(apiWhitelist)
 	} else {
 		return false
 	}
 
-	if  cnf.Api.Auth != "none" {
+	if cnf.Api.Auth != "none" {
 		apiUsersAdmin := form.GetFormItemByLabel(ServerInputLabel["apiUsersAdmin"]).(*tview.InputField).GetText()
 		apiUsersRoot := form.GetFormItemByLabel(ServerInputLabel["apiUsersRoot"]).(*tview.InputField).GetText()
 
@@ -83,13 +83,13 @@ func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) boo
 		apiUsersRoot = strings.TrimSpace(apiUsersRoot)
 
 		if g.checkAndNotifyRequiredField(apiUsersAdmin, ServerInputLabel["apiUsersAdmin"], apiFormId) &&
-		g.checkAndNotifyRequiredField(apiUsersRoot, ServerInputLabel["apiUsersRoot"], apiFormId) {
+			g.checkAndNotifyRequiredField(apiUsersRoot, ServerInputLabel["apiUsersRoot"], apiFormId) {
 			cnf.Api.Users.Admin = apiListen
 			cnf.Api.Users.Root = apiUsersRoot
 		} else {
 			return false
 		}
-	} 
+	}
 
 	return true
 }

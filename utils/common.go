@@ -1,14 +1,13 @@
 package utils
 
-
 import (
+	"errors"
+	"fmt"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
-    "log"
+	"log"
 	"strconv"
 	"strings"
-	"fmt"
-     "gopkg.in/yaml.v3"
-	 "errors"
 )
 
 func ReadConfigFile(config_path string, config_data interface{}) {
@@ -21,7 +20,7 @@ func ReadConfigFile(config_path string, config_data interface{}) {
 	err2 := yaml.Unmarshal(yfile, &config_data)
 
 	if err2 != nil {
-		 log.Fatal(err2)
+		log.Fatal(err2)
 	}
 }
 
@@ -29,11 +28,11 @@ func SaveConfigToFile(config_data interface{}, config_path string) {
 	data, err := yaml.Marshal(&config_data)
 	if err != nil {
 		log.Fatal(err)
-   }
-   err2 := ioutil.WriteFile(config_path, data, 0644)
-   if err2 != nil {
+	}
+	err2 := ioutil.WriteFile(config_path, data, 0644)
+	if err2 != nil {
 		log.Fatal(err2)
-   }
+	}
 }
 
 func StrToList(value string) (values []string) {
@@ -71,11 +70,11 @@ func GetWrongFormatMsg(fieldName, exampleFormat string) (msg string) {
 
 func GetIndexFromVal(values []string, value string) int {
 	for ind, val := range values {
-        if value == val {
-            return ind
-        }
-    }
-    return 0
+		if value == val {
+			return ind
+		}
+	}
+	return 0
 }
 
 func BoolToIndexDisableAnable(value bool) int {
@@ -89,7 +88,7 @@ func BoolToIndexDisableAnable(value bool) int {
 func ConvToListOfIntStrDict(inputData string) ([]map[int]string, error) {
 	result := []map[int]string{}
 	err := errors.New("wrong value format")
-	
+
 	values := strings.Split(inputData, ",")
 	for _, pairValues := range values {
 		mapValues := strings.Split(pairValues, ":")
