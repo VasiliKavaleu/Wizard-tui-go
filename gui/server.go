@@ -9,11 +9,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Main form consisting all input field and DropDown filds for moving other forms
 func (g *Gui) drawServerConfForm() {
 	initialCnf := utils.ServerConfig{}
 
 	if g.editServer {
-		// utils.ReadConfigFile(serverFilePath, initialCnf)
 		yfile, _ := ioutil.ReadFile(serverFilePath)
 		_ = yaml.Unmarshal(yfile, &initialCnf)
 		
@@ -89,7 +89,7 @@ func (g *Gui) drawServerConfForm() {
 	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
 }
 
-
+// addPopUpHandler adds handler to some DropDown field which show forms depending on input value
 func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
 	apiUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["apiUsage"]).(*tview.DropDown)
 	apiUsageDropDown.SetSelectedFunc(func(text string, index int){
@@ -257,7 +257,7 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	return true
 }
 
-
+// form reflecting checkboxes 
 func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.ServerConfig) {
 	form := tview.NewForm()
 	form.SetBorder(true)
@@ -315,7 +315,7 @@ func (g *Gui) drawcontrollerEventsForm(parentForm *tview.Form, cnf *utils.Server
 	g.pages.AddAndSwitchToPage("controllerEvents", g.modal(form, 40, 13), true).ShowPage("serverForm")
 }
 
-
+// Form for confirmation of saving the main form
 func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
 	modal:= tview.NewModal().
 			SetText(saveMsg).
@@ -333,6 +333,7 @@ func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
 	g.pages.AddAndSwitchToPage("saveServerNotify", modal, true).ShowPage(serverFormId)
 }
 
+// Verification notification form of mandatory field 
 func (g *Gui) checkAndNotifyRequiredField(inputValue, inputLabel, whichFormShow string) bool {
 	if !utils.ValidReqField(inputValue) {
 		msg := utils.GetReqFieldMsg(inputLabel)
