@@ -85,7 +85,7 @@ type Cluster struct {
 	Enable bool
 	Id int
 	Node int
-	Pool string
+	Pool []map[int]string
 	Healthcheck  `yaml:"healthcheck"`
 }
 

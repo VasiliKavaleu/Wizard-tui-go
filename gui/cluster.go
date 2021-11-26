@@ -15,7 +15,7 @@ func (g *Gui) drawClusterConfForm(cnf *utils.ServerConfig, parentForm *tview.For
 
 	form.AddInputField(ServerInputLabel["clusterId"], strconv.Itoa(cnf.Cluster.Id), inputWidth, utils.ValidInt, nil)
 	form.AddInputField(ServerInputLabel["clusterNode"], strconv.Itoa(cnf.Cluster.Node), inputWidth, utils.ValidInt, nil)
-	form.AddInputField(ServerInputLabel["clusterPool"], cnf.Cluster.Pool, inputWidth, nil, nil)
+	form.AddInputField(ServerInputLabel["clusterPool"], utils.FromListOfDictToStr(cnf.Cluster.Pool), inputWidth, nil, nil)
 
 	form.AddInputField(ServerInputLabel["clusterWarmingUp"], cnf.Cluster.Healthcheck.WarmingUp, inputWidth, nil, nil)
 	form.AddInputField(ServerInputLabel["clusterRetries"], strconv.Itoa(cnf.Cluster.Healthcheck.Retries), inputWidth, utils.ValidInt, nil)
@@ -66,7 +66,14 @@ func (g *Gui) validateSaveClusterConf(form *tview.Form, cnf *utils.ServerConfig)
 	g.checkAndNotifyRequiredField(clusterInterval, ServerInputLabel["clusterInterval"], clusterFormId){
 		cnf.Cluster.Id, _ = strconv.Atoi(clusterId)
 		cnf.Cluster.Node, _ = strconv.Atoi(clusterNode)
-		cnf.Cluster.Pool = clusterPool
+		if pool, err := utils.ConvToListOfIntStrDict(clusterPool); err == nil {
+			cnf.Cluster.Pool = pool
+		} else {
+			msg := utils.GetWrongFormatMsg(ServerInputLabel["clusterPool"], examplePoolFormat)
+			g.drawNotifyMsgOkForm(msg, clusterFormId)
+			return false
+		}
+
 		cnf.Cluster.WarmingUp = clusterWarmingUp
 		cnf.Cluster.Retries, _ = strconv.Atoi(clusterRetries)
 		cnf.Cluster.Interval = clusterInterval
@@ -75,5 +82,3 @@ func (g *Gui) validateSaveClusterConf(form *tview.Form, cnf *utils.ServerConfig)
 
 	return false
 }
-
-

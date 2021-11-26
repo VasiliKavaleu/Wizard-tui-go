@@ -11,6 +11,7 @@ import (
 	"fmt"
 
      "gopkg.in/yaml.v3"
+	 "errors"
 	//  "github.com/rivo/tview"
 )
 
@@ -67,6 +68,11 @@ func GetReqFieldMsg(fieldName string) (msg string) {
 	return
 }
 
+func GetWrongFormatMsg(fieldName, exampleFormat string) (msg string) {
+	msg = fmt.Sprintf("Wrong format! Field '%s' should be like this: '%s'. \n", fieldName, exampleFormat)
+	return
+}
+
 func GetIndexFromVal(values []string, value string) int {
 	for ind, val := range values {
         if value == val {
@@ -82,4 +88,46 @@ func BoolToIndexDisableAnable(value bool) int {
 	} else {
 		return 0
 	}
+}
+
+func ConvToListOfIntStrDict(inputData string) ([]map[int]string, error) {
+	result := []map[int]string{}
+	err := errors.New("wrong value format")
+	
+	values := strings.Split(inputData, ",")
+	for _, pairValues := range values {
+		mapValues := strings.Split(pairValues, ":")
+		if len(mapValues) < 2 {
+			return result, err
+		} else {
+			key := strings.TrimSpace(mapValues[0])
+			keyPrepared, convErr := strconv.Atoi(key)
+			if convErr != nil {
+				return result, convErr
+			}
+			valuePrepared := strings.TrimSpace(mapValues[1])
+			if len(valuePrepared) == 0 {
+				return result, err
+			}
+
+			result = append(result, map[int]string{
+				keyPrepared: valuePrepared,
+			})
+		}
+
+	}
+	return result, nil
+}
+
+func FromListOfDictToStr(values []map[int]string) string {
+	interResult := []string{}
+	var pairVal string
+	for _, baseVal := range values {
+		for key, value := range baseVal {
+			keyPrepared := strconv.Itoa(key)
+			pairVal = fmt.Sprintf("'%s':'%s'", keyPrepared, value)
+			interResult = append(interResult, pairVal)
+		}
+	}
+	return strings.Join(interResult, ",")
 }

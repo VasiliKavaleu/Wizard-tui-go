@@ -106,7 +106,6 @@ func (g *Gui) modal(p tview.Primitive, width, height int) tview.Primitive {
 
 
 func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
-	///// Main Layout /////
 	info := tview.NewTextView() 
 	info.SetBorder(true)
 	info.SetText("Mediaserver Wizard v1.0") 
@@ -129,7 +128,6 @@ func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
 }
 
 func createCommandList() (commandList *tview.List) {
-	///// Commands /////
 	commandList = tview.NewList()                         
 	commandList.SetBorder(true).SetTitle(mainMenuTitle) 
 	commandList.ShowSecondaryText(false)

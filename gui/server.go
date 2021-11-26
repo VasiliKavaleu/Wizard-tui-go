@@ -22,6 +22,8 @@ func (g *Gui) drawServerConfForm() {
 	// else {
 	// 	initialCnf = utils.ServerConfig{}
 	// }
+
+
 	cnf := &initialCnf
 
 	//g.drawNotifyMsgOkForm(utils.ListToStr(cnf.Server.Media.Storages), "")
@@ -67,7 +69,9 @@ func (g *Gui) drawServerConfForm() {
 					func(option string, optionIndex int){
 						if optionIndex != 0 {
 							cnf.Api.Enable = true
+							
 							g.drawApiConfForm(cnf, form)
+							//g.drawQuitNotifyForm()
 						} else {
 							cnf.Api.Enable = false
 						}

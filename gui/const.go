@@ -8,6 +8,7 @@ var (
 	saveMsg = "Save configuration?"
 	saveSuccessConfMsg = "Configuration file saved successfully!"
 	notSaveMsg = "Exit? Changes will not be saved!"
+	examplePoolFormat = "1001 : node_host_name-1, 1002: node_host_name-2"
 
 	// form labes
 	labelServerForm = " Fill out server configuration form "
