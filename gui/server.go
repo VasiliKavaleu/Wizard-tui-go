@@ -17,17 +17,10 @@ func (g *Gui) drawServerConfForm() {
 		yfile, _ := ioutil.ReadFile(serverFilePath)
 		_ = yaml.Unmarshal(yfile, &initialCnf)
 		
+		
 	} 
 	
-	// else {
-	// 	initialCnf = utils.ServerConfig{}
-	// }
-
-
 	cnf := &initialCnf
-
-	//g.drawNotifyMsgOkForm(utils.ListToStr(cnf.Server.Media.Storages), "")
-	
 
 
 	form := tview.NewForm()
@@ -59,43 +52,15 @@ func (g *Gui) drawServerConfForm() {
 		g.drawcontrollerEventsForm(form, cnf)
 	})
 
-
 	form.AddDropDown(ServerInputLabel["controllerDsn"], controllerDsnOptions, utils.GetIndexFromVal(controllerDsnOptions, cnf.Controller.Dsn), 
 					func(option string, optionIndex int){
 							cnf.Controller.Dsn = option
 					})
 
-	form.AddDropDown(ServerInputLabel["apiUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Api.Enable), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Api.Enable = true
-							
-							g.drawApiConfForm(cnf, form)
-							//g.drawQuitNotifyForm()
-						} else {
-							cnf.Api.Enable = false
-						}
-					})
-	
-	form.AddDropDown(ServerInputLabel["cpanelUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cpanel.Enable), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Cpanel.Enable = true
-							g.drawCpanelConfForm(cnf, form)
-						} else {
-							cnf.Cpanel.Enable = false
-						}
-					})
+	form.AddDropDown(ServerInputLabel["apiUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Api.Enable), nil)
+	form.AddDropDown(ServerInputLabel["cpanelUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cpanel.Enable), nil)
+	form.AddDropDown(ServerInputLabel["clusterUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cluster.Enable), nil)
 
-	form.AddDropDown(ServerInputLabel["clusterUsage"], usageDropDownOptions, utils.BoolToIndexDisableAnable(cnf.Cluster.Enable), 
-					func(option string, optionIndex int){
-						if optionIndex != 0 {
-							cnf.Cluster.Enable = true
-							g.drawClusterConfForm(cnf, form)
-						} else {
-							cnf.Cluster.Enable = false
-						}
-					})
 
 	exit := func() {
 		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", serverFormId, "main")
@@ -113,6 +78,8 @@ func (g *Gui) drawServerConfForm() {
 	form.SetButtonsAlign(tview.AlignRight) 							
 	form.SetBorder(true).SetTitle(labelServerForm)
 
+	g.addPopUpHandler(cnf, form)
+
 	createSereverConfigPage := func(form tview.Primitive) tview.Primitive {
 		createPage := tview.NewFlex().SetDirection(tview.FlexRow)
 		createPage.AddItem(form, 0, 2, true)
@@ -120,6 +87,39 @@ func (g *Gui) drawServerConfForm() {
 	}(form)
 
 	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
+}
+
+
+func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
+	apiUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["apiUsage"]).(*tview.DropDown)
+	apiUsageDropDown.SetSelectedFunc(func(text string, index int){
+		if index != 0 {
+			cnf.Api.Enable = true
+			g.drawApiConfForm(cnf, form)
+		} else {
+			cnf.Api.Enable = false
+		}
+	})
+
+	cpanelUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["cpanelUsage"]).(*tview.DropDown)
+	cpanelUsageDropDown.SetSelectedFunc(func(text string, index int){
+		if index != 0 {
+			cnf.Cpanel.Enable = true
+			g.drawCpanelConfForm(cnf, form)
+		} else {
+			cnf.Cpanel.Enable = false
+		}
+	})
+
+	clusterUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["clusterUsage"]).(*tview.DropDown)
+	clusterUsageDropDown.SetSelectedFunc(func(text string, index int){
+		if index != 0 {
+			cnf.Cluster.Enable = true
+			g.drawClusterConfForm(cnf, form)
+		} else {
+			cnf.Cluster.Enable = false
+		}
+	})
 }
 
 

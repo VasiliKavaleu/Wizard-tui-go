@@ -77,7 +77,7 @@ func (g *Gui) drawOkCancelNotifyForm(notifyMsg, okTitleBtn, cancelTitleBtn, show
 			AddButtons([]string{okTitleBtn, cancelTitleBtn}).
 			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 				if buttonLabel == cancelTitleBtn {
-					g.pages.RemovePage("okCancelNotify").ShowPage(showCurrentForm)
+					g.pages.RemovePage("okCancelNotify").SwitchToPage(showCurrentForm)
 				} else {
 					g.pages.RemovePage("okCancelNotify").SwitchToPage(showNextForm)
 				}
