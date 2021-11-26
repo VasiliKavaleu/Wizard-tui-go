@@ -59,79 +59,45 @@ func (g *Gui) drawCpanelConfForm(cnf *utils.ServerConfig, parentForm *tview.Form
 
 func (g *Gui) validateSaveCpanelConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	cpanelListen := form.GetFormItemByLabel(ServerInputLabel["cpanelListen"]).(*tview.InputField).GetText()
-	cpanelListen = strings.TrimSpace(cpanelListen)
-	if !utils.ValidReqField(cpanelListen) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelListen"])
-		g.drawNotifyMsgOkForm(msg, cpanelFormId)
-		return false 
-	}
-
 	cpanelModule := form.GetFormItemByLabel(ServerInputLabel["cpanelModule"]).(*tview.InputField).GetText()
-	cpanelModule = strings.TrimSpace(cpanelModule)
-	if !utils.ValidReqField(cpanelModule) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelModule"])
-		g.drawNotifyMsgOkForm(msg, cpanelFormId)
-		return false
-	}
-
 	cpanelWhitelist := form.GetFormItemByLabel(ServerInputLabel["cpanelWhitelist"]).(*tview.InputField).GetText()
+
+	cpanelListen = strings.TrimSpace(cpanelListen)
+	cpanelModule = strings.TrimSpace(cpanelModule)
 	cpanelWhitelist = strings.TrimSpace(cpanelWhitelist)
-	if !utils.ValidReqField(cpanelWhitelist) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelWhitelist"])
-		g.drawNotifyMsgOkForm(msg, cpanelFormId)
-		return false	 
-	}
 
-	if cnf.Cpanel.Auth == "" {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelAuth"])
-		g.drawNotifyMsgOkForm(msg, cpanelFormId)
+	if g.checkAndNotifyRequiredField(cpanelListen, ServerInputLabel["cpanelListen"], cpanelFormId) &&
+	g.checkAndNotifyRequiredField(cpanelModule, ServerInputLabel["cpanelModule"], cpanelFormId) &&
+	g.checkAndNotifyRequiredField(cpanelWhitelist, ServerInputLabel["cpanelWhitelist"], cpanelFormId) {
+		cnf.Cpanel.Listen = cpanelListen
+		cnf.Cpanel.Module = cpanelModule
+		cnf.Cpanel.Whitelist = utils.StrToList(cpanelWhitelist)
+	} else {
 		return false
-	}  else if cnf.Cpanel.Auth != "none" {
-		cpanelUsersAdmin := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersAdmin"]).(*tview.InputField).GetText()
-		cpanelUsersAdmin = strings.TrimSpace(cpanelUsersAdmin)
-		if utils.ValidReqField(cpanelUsersAdmin) {
-			cnf.Cpanel.Users.Admin = cpanelUsersAdmin 
-		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelUsersAdmin"])
-			g.drawNotifyMsgOkForm(msg, cpanelFormId)
-			return false
-		}
-
-		cpanelUsersRoot := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersRoot"]).(*tview.InputField).GetText()
-		cpanelUsersRoot = strings.TrimSpace(cpanelUsersRoot)
-		if utils.ValidReqField(cpanelUsersRoot) {
-			cnf.Cpanel.Users.Root = cpanelUsersRoot 
-		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelUsersRoot"])
-			g.drawNotifyMsgOkForm(msg, cpanelFormId)
-			return false
-		}
-
-		cpanelUsersUser := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersUser"]).(*tview.InputField).GetText()
-		cpanelUsersUser = strings.TrimSpace(cpanelUsersUser)
-		if utils.ValidReqField(cpanelUsersUser) {
-			cnf.Cpanel.Users.User = cpanelUsersUser 
-		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelUsersUser"])
-			g.drawNotifyMsgOkForm(msg, cpanelFormId)
-			return false
-		}
-
-		cpanelUsersGuest := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersGuest"]).(*tview.InputField).GetText()
-		cpanelUsersGuest = strings.TrimSpace(cpanelUsersGuest)
-		if utils.ValidReqField(cpanelUsersGuest) {
-			cnf.Cpanel.Users.Guest = cpanelUsersGuest 
-		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["cpanelUsersGuest"])
-			g.drawNotifyMsgOkForm(msg, cpanelFormId)
-			return false
-		}
-
 	}
 
-	cnf.Cpanel.Listen = cpanelListen
-	cnf.Cpanel.Module = cpanelModule
-	cnf.Cpanel.Whitelist = utils.StrToList(cpanelWhitelist)
+	if cnf.Cpanel.Auth != "none" {
+		cpanelUsersAdmin := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersAdmin"]).(*tview.InputField).GetText()
+		cpanelUsersRoot := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersRoot"]).(*tview.InputField).GetText()
+		cpanelUsersUser := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersUser"]).(*tview.InputField).GetText()
+		cpanelUsersGuest := form.GetFormItemByLabel(ServerInputLabel["cpanelUsersGuest"]).(*tview.InputField).GetText()
 
+		cpanelUsersAdmin = strings.TrimSpace(cpanelUsersAdmin)
+		cpanelUsersRoot = strings.TrimSpace(cpanelUsersRoot)
+		cpanelUsersUser = strings.TrimSpace(cpanelUsersUser)
+		cpanelUsersGuest = strings.TrimSpace(cpanelUsersGuest)
+
+		if g.checkAndNotifyRequiredField(cpanelUsersAdmin, ServerInputLabel["cpanelUsersAdmin"], cpanelFormId) &&
+		g.checkAndNotifyRequiredField(cpanelUsersRoot, ServerInputLabel["cpanelUsersRoot"], cpanelFormId) &&
+		g.checkAndNotifyRequiredField(cpanelUsersUser, ServerInputLabel["cpanelUsersUser"], cpanelFormId) &&
+		g.checkAndNotifyRequiredField(cpanelUsersGuest, ServerInputLabel["cpanelUsersGuest"], cpanelFormId) {
+			cnf.Cpanel.Users.Admin = cpanelUsersAdmin
+			cnf.Cpanel.Users.Root = cpanelUsersRoot
+			cnf.Cpanel.Users.User = cpanelUsersUser
+			cnf.Cpanel.Users.Guest = cpanelUsersGuest
+		} else {
+			return false
+		}
+	}
 	return true
 }
