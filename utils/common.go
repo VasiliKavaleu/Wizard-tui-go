@@ -125,7 +125,7 @@ func FromListOfDictToStr(values []map[int]string) string {
 	for _, baseVal := range values {
 		for key, value := range baseVal {
 			keyPrepared := strconv.Itoa(key)
-			pairVal = fmt.Sprintf("'%s':'%s'", keyPrepared, value)
+			pairVal = fmt.Sprintf("%s:%s", keyPrepared, value)
 			interResult = append(interResult, pairVal)
 		}
 	}
