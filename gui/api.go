@@ -25,6 +25,7 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 					})
 
 	form.AddInputField(ServerInputLabel["apiWhitelist"], utils.ListToStr(cnf.Api.Whitelist), inputWidth, nil, nil)
+
 	form.AddDropDown(ServerInputLabel["apiAuth"], apiAuthDropDownOptions, utils.GetIndexFromVal(apiAuthDropDownOptions, cnf.Api.Auth), 
 					func(option string, optionIndex int){
 						cnf.Api.Auth = option
@@ -57,58 +58,38 @@ func (g *Gui) drawApiConfForm(cnf *utils.ServerConfig, parentForm *tview.Form) {
 
 func (g *Gui) validateSaveApiConf(form *tview.Form, cnf *utils.ServerConfig) bool {
 	apiListen := form.GetFormItemByLabel(ServerInputLabel["apiListen"]).(*tview.InputField).GetText()
-	apiListen = strings.TrimSpace(apiListen)
-	if !utils.ValidReqField(apiListen) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["apiListen"])
-		g.drawNotifyMsgOkForm(msg, apiFormId)
-		return false
-	}
-
 	apiModule := form.GetFormItemByLabel(ServerInputLabel["apiModule"]).(*tview.InputField).GetText()
-	apiModule = strings.TrimSpace(apiModule)
-	if !utils.ValidReqField(apiModule) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["apiModule"])
-		g.drawNotifyMsgOkForm(msg, apiFormId)
-		return false
-	}
-
 	apiWhitelist := form.GetFormItemByLabel(ServerInputLabel["apiWhitelist"]).(*tview.InputField).GetText()
+
+	apiListen = strings.TrimSpace(apiListen)
+	apiModule = strings.TrimSpace(apiModule)
 	apiWhitelist = strings.TrimSpace(apiWhitelist)
-	if !utils.ValidReqField(apiWhitelist) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["apiWhitelist"])
-		g.drawNotifyMsgOkForm(msg, apiFormId)
+
+	if g.checkAndNotifyRequiredField(apiListen, ServerInputLabel["apiListen"], apiFormId) &&
+	g.checkAndNotifyRequiredField(apiModule, ServerInputLabel["apiModule"], apiFormId) &&
+	g.checkAndNotifyRequiredField(apiWhitelist, ServerInputLabel["apiWhitelist"], apiFormId) {
+		cnf.Api.Listen = apiListen
+		cnf.Api.Module = apiModule
+		cnf.Api.Whitelist = utils.StrToList(apiWhitelist) 
+	} else {
 		return false
 	}
 
-	if cnf.Api.Auth == "" {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["apiAuth"])
-		g.drawNotifyMsgOkForm(msg, apiFormId)
-		return false
-	}  else if cnf.Api.Auth != "none" {
+	if  cnf.Api.Auth != "none" {
 		apiUsersAdmin := form.GetFormItemByLabel(ServerInputLabel["apiUsersAdmin"]).(*tview.InputField).GetText()
-		apiUsersAdmin = strings.TrimSpace(apiUsersAdmin)
-		if utils.ValidReqField(apiUsersAdmin) {
-			cnf.Api.Users.Admin = apiListen 
-		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["apiUsersAdmin"])
-			g.drawNotifyMsgOkForm(msg, apiFormId)
-			return false
-		}
-
 		apiUsersRoot := form.GetFormItemByLabel(ServerInputLabel["apiUsersRoot"]).(*tview.InputField).GetText()
+
+		apiUsersAdmin = strings.TrimSpace(apiUsersAdmin)
 		apiUsersRoot = strings.TrimSpace(apiUsersRoot)
-		if utils.ValidReqField(apiUsersAdmin) {
-			cnf.Api.Users.Root = apiUsersRoot 
+
+		if g.checkAndNotifyRequiredField(apiUsersAdmin, ServerInputLabel["apiUsersAdmin"], apiFormId) &&
+		g.checkAndNotifyRequiredField(apiUsersRoot, ServerInputLabel["apiUsersRoot"], apiFormId) {
+			cnf.Api.Users.Admin = apiListen
+			cnf.Api.Users.Root = apiUsersRoot
 		} else {
-			msg := utils.GetReqFieldMsg(ServerInputLabel["apiUsersRoot"])
-			g.drawNotifyMsgOkForm(msg, apiFormId)
 			return false
 		}
-	}
-
-	cnf.Api.Listen = apiListen
-	cnf.Api.Module = apiModule
-	cnf.Api.Whitelist = utils.StrToList(apiWhitelist) 
+	} 
 
 	return true
 }

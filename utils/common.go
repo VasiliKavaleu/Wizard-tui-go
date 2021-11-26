@@ -2,17 +2,13 @@ package utils
 
 
 import (
-
 	"io/ioutil"
     "log"
-	// "os"
 	"strconv"
 	"strings"
 	"fmt"
-
      "gopkg.in/yaml.v3"
 	 "errors"
-	//  "github.com/rivo/tview"
 )
 
 func ReadConfigFile(config_path string, config_data interface{}) {
@@ -79,7 +75,7 @@ func GetIndexFromVal(values []string, value string) int {
             return ind
         }
     }
-    return len(values)
+    return 0
 }
 
 func BoolToIndexDisableAnable(value bool) int {
