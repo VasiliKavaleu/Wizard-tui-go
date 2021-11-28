@@ -1,8 +1,8 @@
 package gui
 
 import (
+	"configurator/utils"
 	"github.com/rivo/tview"
-	"github.com/gdamore/tcell/v2"
 	"os"
 )
 
@@ -101,48 +101,19 @@ func (g *Gui) drawNotifyMsgOkForm(msg string, whichFormShow string) {
 	g.pages.AddAndSwitchToPage("notifyMsgOk", modal, true).ShowPage(whichFormShow)
 }
 
+// Verification notification form of mandatory field
+func (g *Gui) checkAndNotifyRequiredField(inputValue, inputLabel, whichFormShow string) bool {
+	if !utils.ValidReqField(inputValue) {
+		msg := utils.GetReqFieldMsg(inputLabel)
+		g.drawNotifyMsgOkForm(msg, whichFormShow)
+		return false
+	}
+	return true
+}
+
 func (g *Gui) modal(p tview.Primitive, width, height int) tview.Primitive {
 	return tview.NewGrid().
 		SetColumns(0, width, 0).
 		SetRows(0, height, 0).
 		AddItem(p, 1, 1, 1, 1, 0, 0, true)
-}
-
-func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
-	info := tview.NewTextView()
-	info.SetBorder(true)
-	info.SetText("Mediaserver Wizard v1.0")
-	info.SetTextAlign(tview.AlignCenter)
-
-	mainLayout := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(commandList, 10, 1, true)
-
-	flex := tview.NewFlex().
-		AddItem(tview.NewBox(), 0, 1, false).
-		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-			AddItem(tview.NewBox().SetTitle("Top"), 0, 1, false).
-			AddItem(mainLayout, 0, 3, true).
-			AddItem(info, 3, 1, false), 0, 2, true).
-		AddItem(tview.NewBox(), 0, 1, false)
-
-	layout = tview.NewFrame(flex).SetBorders(4, 2, 8, 8, 0, 0)
-	return 
-}
-
-func createCommandList() (commandList *tview.List) {
-	commandList = tview.NewList()
-	commandList.SetBorder(true).SetTitle(mainMenuTitle)
-	commandList.ShowSecondaryText(false)
-	return commandList
-}
-
-
-func createFormLayout(form tview.Primitive) tview.Primitive {
-	layout := tview.NewFlex().SetDirection(tview.FlexRow)
-	layout.AddItem(form, 0, 2, true)
-	layout.AddItem(tview.NewTextView().
-					SetText(navigate).
-					SetTextAlign(tview.AlignCenter).
-					SetTextColor(tcell.ColorLightCyan), 2, 1, false)
-	return layout
 }

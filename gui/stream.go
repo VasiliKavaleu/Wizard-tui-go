@@ -2,9 +2,9 @@ package gui
 
 import (
 	"configurator/utils"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"github.com/satori/go.uuid"
-	"github.com/gdamore/tcell/v2"
 	"strconv"
 	"strings"
 )
@@ -33,17 +33,17 @@ func (g *Gui) drawStreamConfForm() {
 	})
 
 	form.AddDropDown(StreamInputLabel["cameraEnable"], usageDropDownOptions, 1,
-	func(option string, optionIndex int) {
-		if optionIndex != 0 {
-			cnf.Enable = true
-		} else {
-			cnf.Enable = false
-		}
-	})
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Enable = true
+			} else {
+				cnf.Enable = false
+			}
+		})
 
 	form.AddInputField(StreamInputLabel["clusterNode"], "", inputWidth, nil, nil)
 
-	form.AddInputField(StreamInputLabel["clusterSecondary"], "", inputWidth, nil, func(value string) {		
+	form.AddInputField(StreamInputLabel["clusterSecondary"], "", inputWidth, nil, func(value string) {
 		value = strings.TrimSpace(value)
 		cnf.Secondary = utils.StrToList(value)
 	})
@@ -52,20 +52,19 @@ func (g *Gui) drawStreamConfForm() {
 	form.AddInputField(StreamInputLabel["reconnectTimeout"], "", inputWidth, nil, nil)
 	form.AddInputField(StreamInputLabel["reconnectInterval"], "", inputWidth, nil, nil)
 
-
 	form.AddDropDown(StreamInputLabel["streamsEnable"], usageDropDownOptions, 1,
-	func(option string, optionIndex int) {
-		if optionIndex != 0 {
-			cnf.Streams.Enable = true
-		} else {
-			cnf.Streams.Enable = false
-		}
-	})
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Streams.Enable = true
+			} else {
+				cnf.Streams.Enable = false
+			}
+		})
 
-	form.AddDropDown(StreamInputLabel["streamsStream"], streamsStreamOptions, 0, 
-	func(option string, optionIndex int) {
-		cnf.Streams.Stream = option
-	})
+	form.AddDropDown(StreamInputLabel["streamsStream"], streamsStreamOptions, 0,
+		func(option string, optionIndex int) {
+			cnf.Streams.Stream = option
+		})
 
 	form.AddInputField(StreamInputLabel["streamsTracks"], "", inputWidth, nil, func(text string) {
 		g.drawStreamsTracksForm(form, cnf)
@@ -75,10 +74,10 @@ func (g *Gui) drawStreamConfForm() {
 		g.drawStreamsBroadcastForm(form, cnf)
 	})
 
-	form.AddDropDown(StreamInputLabel["accessType"], accessTypeOptions, 0, 
-	func(option string, optionIndex int) {
-		cnf.Streams.Type = option
-	})
+	form.AddDropDown(StreamInputLabel["accessType"], accessTypeOptions, 0,
+		func(option string, optionIndex int) {
+			cnf.Streams.Type = option
+		})
 
 	form.AddInputField(StreamInputLabel["accessAuthType"], "", inputWidth, nil, nil)
 	form.AddInputField(StreamInputLabel["accessAuthUser"], "", inputWidth, nil, nil)
@@ -94,13 +93,13 @@ func (g *Gui) drawStreamConfForm() {
 	})
 
 	form.AddDropDown(StreamInputLabel["dvrEnable"], usageDropDownOptions, 1,
-	func(option string, optionIndex int) {
-		if optionIndex != 0 {
-			cnf.Streams.Enable = true
-		} else {
-			cnf.Streams.Enable = false
-		}
-	})
+		func(option string, optionIndex int) {
+			if optionIndex != 0 {
+				cnf.Streams.Enable = true
+			} else {
+				cnf.Streams.Enable = false
+			}
+		})
 
 	form.AddInputField(StreamInputLabel["dvrLocation"], "", inputWidth, nil, nil)
 	form.AddInputField(StreamInputLabel["dvrDepth"], "", inputWidth, nil, nil)
@@ -135,7 +134,6 @@ func (g *Gui) drawStreamConfForm() {
 	g.pages.AddAndSwitchToPage(streamFormId, createStreamConfigPage, true)
 }
 
-
 func (g *Gui) validateSaveStreamConf(form *tview.Form, cnf *utils.StreamConfig) bool {
 	clusterNode := form.GetFormItemByLabel(StreamInputLabel["clusterNode"]).(*tview.InputField).GetText()
 	reconnectAttempts := form.GetFormItemByLabel(StreamInputLabel["reconnectAttempts"]).(*tview.InputField).GetText()
@@ -164,13 +162,13 @@ func (g *Gui) validateSaveStreamConf(form *tview.Form, cnf *utils.StreamConfig) 
 
 	if g.checkAndNotifyRequiredField(clusterNode, StreamInputLabel["clusterNode"], streamFormId) &&
 
-	g.checkAndNotifyRequiredField(reconnectAttempts, StreamInputLabel["reconnectAttempts"], streamFormId) &&
-	g.checkAndNotifyRequiredField(reconnectTimeout, StreamInputLabel["reconnectTimeout"], streamFormId) &&
-	g.checkAndNotifyRequiredField(reconnectInterval, StreamInputLabel["reconnectInterval"], streamFormId) &&
+		g.checkAndNotifyRequiredField(reconnectAttempts, StreamInputLabel["reconnectAttempts"], streamFormId) &&
+		g.checkAndNotifyRequiredField(reconnectTimeout, StreamInputLabel["reconnectTimeout"], streamFormId) &&
+		g.checkAndNotifyRequiredField(reconnectInterval, StreamInputLabel["reconnectInterval"], streamFormId) &&
 
-	g.checkAndNotifyRequiredField(accessAuthType, StreamInputLabel["accessAuthType"], streamFormId) &&
-	g.checkAndNotifyRequiredField(accessAuthUser, StreamInputLabel["accessAuthUser"], streamFormId) &&
-	g.checkAndNotifyRequiredField(accessAuthPassword, StreamInputLabel["accessAuthPassword"], streamFormId) {
+		g.checkAndNotifyRequiredField(accessAuthType, StreamInputLabel["accessAuthType"], streamFormId) &&
+		g.checkAndNotifyRequiredField(accessAuthUser, StreamInputLabel["accessAuthUser"], streamFormId) &&
+		g.checkAndNotifyRequiredField(accessAuthPassword, StreamInputLabel["accessAuthPassword"], streamFormId) {
 
 		cnf.Node = clusterNode
 		cnf.Reconnect.Attemps, _ = strconv.Atoi(reconnectAttempts)
@@ -185,10 +183,10 @@ func (g *Gui) validateSaveStreamConf(form *tview.Form, cnf *utils.StreamConfig) 
 	}
 
 	if cnf.Streams.Enable {
-		if 	g.checkAndNotifyRequiredField(dvrLocation, StreamInputLabel["dvrLocation"], streamFormId) &&
-		g.checkAndNotifyRequiredField(dvrDepth, StreamInputLabel["dvrDepth"], streamFormId) &&
-		g.checkAndNotifyRequiredField(dvrCapacity, StreamInputLabel["dvrCapacity"], streamFormId) &&
-		g.checkAndNotifyRequiredField(dvrChunk, StreamInputLabel["dvrChunk"], streamFormId) {
+		if g.checkAndNotifyRequiredField(dvrLocation, StreamInputLabel["dvrLocation"], streamFormId) &&
+			g.checkAndNotifyRequiredField(dvrDepth, StreamInputLabel["dvrDepth"], streamFormId) &&
+			g.checkAndNotifyRequiredField(dvrCapacity, StreamInputLabel["dvrCapacity"], streamFormId) &&
+			g.checkAndNotifyRequiredField(dvrChunk, StreamInputLabel["dvrChunk"], streamFormId) {
 			cnf.Streams.Location = dvrLocation
 			cnf.Streams.Depth = dvrDepth
 			cnf.Streams.Capacity = dvrCapacity
@@ -209,18 +207,18 @@ func (g *Gui) validateSaveStreamConf(form *tview.Form, cnf *utils.StreamConfig) 
 
 func (g *Gui) drawSaveStreamNotifyForm(cnf *utils.StreamConfig) {
 	modal := tview.NewModal().
-	SetText(saveMsg).
-	AddButtons([]string{"Save", "Cancel"}).
-	SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-		if buttonLabel == "Cancel" {
-			g.pages.RemovePage("saveStreamNotify")
-		} else {
-			g.pages.RemovePage("saveStreamNotify")
-			utils.SaveConfigToFile(cnf, utils.GetFileNameByUuid(cnf.Streams.Uid))
-			g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
-		}
-	})
-g.pages.AddAndSwitchToPage("saveStreamNotify", modal, true).ShowPage(streamFormId)
+		SetText(saveMsg).
+		AddButtons([]string{"Save", "Cancel"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			if buttonLabel == "Cancel" {
+				g.pages.RemovePage("saveStreamNotify")
+			} else {
+				g.pages.RemovePage("saveStreamNotify")
+				utils.SaveConfigToFile(cnf, utils.GetFileNameByUuid(cnf.Streams.Uid))
+				g.drawNotifyMsgOkForm(saveSuccessConfMsg, "main")
+			}
+		})
+	g.pages.AddAndSwitchToPage("saveStreamNotify", modal, true).ShowPage(streamFormId)
 }
 
 // form reflecting checkboxes

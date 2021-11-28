@@ -2,12 +2,12 @@ package gui
 
 import (
 	"configurator/utils"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"strconv"
 	"strings"
-	"github.com/gdamore/tcell/v2"
 )
 
 // Main form consisting all input field and DropDown filds for moving other forms
@@ -123,100 +123,59 @@ func (g *Gui) addPopUpServerHandler(cnf *utils.ServerConfig, form *tview.Form) {
 }
 
 func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) bool {
+
 	mediaStorages := form.GetFormItemByLabel(ServerInputLabel["mediaStorages"]).(*tview.InputField).GetText()
-	mediaStorages = strings.TrimSpace(mediaStorages)
-	if !utils.ValidReqField(mediaStorages) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaStorages"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	mediaThreads := form.GetFormItemByLabel(ServerInputLabel["mediaThreads"]).(*tview.InputField).GetText()
-	mediaThreads = strings.TrimSpace(mediaThreads)
-	if !utils.ValidReqField(mediaThreads) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaThreads"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	mediaStreams := form.GetFormItemByLabel(ServerInputLabel["mediaStreams"]).(*tview.InputField).GetText()
-	mediaStreams = strings.TrimSpace(mediaStreams)
-	if !utils.ValidReqField(mediaStreams) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["mediaStreams"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	tokenTtl := form.GetFormItemByLabel(ServerInputLabel["tokenTtl"]).(*tview.InputField).GetText()
-	tokenTtl = strings.TrimSpace(tokenTtl)
-	if !utils.ValidReqField(tokenTtl) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["tokenTtl"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	tokenSecret := form.GetFormItemByLabel(ServerInputLabel["tokenSecret"]).(*tview.InputField).GetText()
-	tokenSecret = strings.TrimSpace(tokenSecret)
-	if !utils.ValidReqField(tokenTtl) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["tokenSecret"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	broadcastWhitelist := form.GetFormItemByLabel(ServerInputLabel["broadcastWhitelist"]).(*tview.InputField).GetText()
-	broadcastWhitelist = strings.TrimSpace(broadcastWhitelist)
-	if !utils.ValidReqField(broadcastWhitelist) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["broadcastWhitelist"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	webThreads := form.GetFormItemByLabel(ServerInputLabel["webThreads"]).(*tview.InputField).GetText()
-	webThreads = strings.TrimSpace(webThreads)
-	if !utils.ValidReqField(webThreads) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["webThreads"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	webListen := form.GetFormItemByLabel(ServerInputLabel["webListen"]).(*tview.InputField).GetText()
-	webListen = strings.TrimSpace(webListen)
-	if !utils.ValidReqField(webListen) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["webListen"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	rtspThreads := form.GetFormItemByLabel(ServerInputLabel["rtspThreads"]).(*tview.InputField).GetText()
-	rtspThreads = strings.TrimSpace(rtspThreads)
-	if !utils.ValidReqField(rtspThreads) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["rtspThreads"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	rtspListen := form.GetFormItemByLabel(ServerInputLabel["rtspListen"]).(*tview.InputField).GetText()
-	rtspListen = strings.TrimSpace(rtspListen)
-	if !utils.ValidReqField(rtspListen) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["rtspListen"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	publishThreads := form.GetFormItemByLabel(ServerInputLabel["publishThreads"]).(*tview.InputField).GetText()
-	publishThreads = strings.TrimSpace(publishThreads)
-	if !utils.ValidReqField(publishThreads) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["publishThreads"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
-		return false
-	}
-
 	publishListen := form.GetFormItemByLabel(ServerInputLabel["publishListen"]).(*tview.InputField).GetText()
+
+	mediaStorages = strings.TrimSpace(mediaStorages)
+	mediaThreads = strings.TrimSpace(mediaThreads)
+	mediaStreams = strings.TrimSpace(mediaStreams)
+	tokenTtl = strings.TrimSpace(tokenTtl)
+	tokenSecret = strings.TrimSpace(tokenSecret)
+	broadcastWhitelist = strings.TrimSpace(broadcastWhitelist)
+	webThreads = strings.TrimSpace(webThreads)
+	webListen = strings.TrimSpace(webListen)
+	rtspThreads = strings.TrimSpace(rtspThreads)
+	rtspListen = strings.TrimSpace(rtspListen)
+	publishThreads = strings.TrimSpace(publishThreads)
 	publishListen = strings.TrimSpace(publishListen)
 
-	if !utils.ValidReqField(publishListen) {
-		msg := utils.GetReqFieldMsg(ServerInputLabel["publishListen"])
-		g.drawNotifyMsgOkForm(msg, serverFormId)
+	if g.checkAndNotifyRequiredField(mediaThreads, ServerInputLabel["mediaThreads"], serverFormId) &&
+		g.checkAndNotifyRequiredField(mediaStreams, ServerInputLabel["mediaStreams"], serverFormId) &&
+		g.checkAndNotifyRequiredField(tokenTtl, ServerInputLabel["tokenTtl"], serverFormId) &&
+		g.checkAndNotifyRequiredField(tokenSecret, ServerInputLabel["tokenSecret"], serverFormId) &&
+		g.checkAndNotifyRequiredField(broadcastWhitelist, ServerInputLabel["broadcastWhitelist"], serverFormId) &&
+		g.checkAndNotifyRequiredField(webThreads, ServerInputLabel["webThreads"], serverFormId) &&
+		g.checkAndNotifyRequiredField(webListen, ServerInputLabel["webListen"], serverFormId) &&
+		g.checkAndNotifyRequiredField(rtspThreads, ServerInputLabel["rtspThreads"], serverFormId) &&
+		g.checkAndNotifyRequiredField(rtspListen, ServerInputLabel["rtspListen"], serverFormId) &&
+		g.checkAndNotifyRequiredField(publishThreads, ServerInputLabel["publishThreads"], serverFormId) &&
+		g.checkAndNotifyRequiredField(publishListen, ServerInputLabel["publishListen"], serverFormId) {
+
+		cnf.Server.Media.Storages = utils.StrToList(mediaStorages)
+		cnf.Server.Media.Threads, _ = strconv.Atoi(mediaThreads)
+		cnf.Server.Media.Streams = utils.StrToList(mediaStreams)
+		cnf.Server.Token.Ttl, _ = strconv.Atoi(tokenTtl)
+		cnf.Server.Token.Secret = tokenSecret
+		cnf.Server.Broadcast.Whitelist = utils.StrToList(broadcastWhitelist)
+		cnf.Server.Broadcast.Web.Listen = webThreads
+		cnf.Server.Broadcast.Web.Listen = webListen
+		cnf.Server.Broadcast.Rtsp.Threads, _ = strconv.Atoi(rtspThreads)
+		cnf.Server.Broadcast.Rtsp.Listen = rtspListen
+		cnf.Server.Broadcast.Publish.Threads, _ = strconv.Atoi(publishThreads)
+		cnf.Server.Broadcast.Publish.Listen = publishListen
+
+	} else {
 		return false
 	}
 
@@ -237,21 +196,6 @@ func (g *Gui) validateSaveServerConf(form *tview.Form, cnf *utils.ServerConfig) 
 	if !cnf.Cluster.Enable {
 		cnf.Cluster = utils.Cluster{}
 	}
-
-	cnf.Server.Media.Storages = utils.StrToList(mediaStorages)
-	cnf.Server.Media.Threads, _ = strconv.Atoi(mediaThreads)
-	cnf.Server.Media.Streams = utils.StrToList(mediaStreams)
-
-	cnf.Server.Token.Ttl, _ = strconv.Atoi(tokenTtl)
-	cnf.Server.Token.Secret = tokenSecret
-
-	cnf.Server.Broadcast.Whitelist = utils.StrToList(broadcastWhitelist)
-	cnf.Server.Broadcast.Web.Listen = webThreads
-	cnf.Server.Broadcast.Web.Listen = webListen
-	cnf.Server.Broadcast.Rtsp.Threads, _ = strconv.Atoi(rtspThreads)
-	cnf.Server.Broadcast.Rtsp.Listen = rtspListen
-	cnf.Server.Broadcast.Publish.Threads, _ = strconv.Atoi(publishThreads)
-	cnf.Server.Broadcast.Publish.Listen = publishListen
 
 	return true
 }
@@ -330,14 +274,4 @@ func (g *Gui) drawSaveServerNotifyForm(cnf *utils.ServerConfig) {
 			}
 		})
 	g.pages.AddAndSwitchToPage("saveServerNotify", modal, true).ShowPage(serverFormId)
-}
-
-// Verification notification form of mandatory field
-func (g *Gui) checkAndNotifyRequiredField(inputValue, inputLabel, whichFormShow string) bool {
-	if !utils.ValidReqField(inputValue) {
-		msg := utils.GetReqFieldMsg(inputLabel)
-		g.drawNotifyMsgOkForm(msg, whichFormShow)
-		return false
-	}
-	return true
 }

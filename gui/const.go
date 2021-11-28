@@ -14,7 +14,7 @@ var (
 	labelServerForm = " Fill out server configuration form "
 	labelApiForm    = " API configuration "
 	labelCpanelForm = " Cpanel configuration "
-	navigate = "<Tab>: Down, <Shift+Tab>: Up, <Enter>: Select an option, <Ctrl+S>: Save, <Esc>: Exit"
+	navigate        = "<Tab>: Down, <Shift+Tab>: Up, <Enter>: Select an option, <Ctrl+S>: Save, <Esc>: Exit"
 
 	menuLabes = map[string]string{
 		"createServer": "Create server configuration",
@@ -28,7 +28,7 @@ var (
 	apiFormId     = "apiForm"
 	cpanelFormId  = "cpanelForm"
 	clusterFormId = "clusterForm"
-	streamFormId = "streamForm"
+	streamFormId  = "streamForm"
 
 	// initial values
 	usageDropDownOptions      = []string{"Disable", "Enable"}
@@ -36,10 +36,10 @@ var (
 	apiAuthDropDownOptions    = []string{"none", "basic", "digest", "token"}
 	cpanelAuthDropDownOptions = []string{"none", "basic", "digest"}
 	controllerEventsOptions   = []string{"up", "state", "stream", "cluster"}
-	accessTypeOptions = []string{"public", "private", "protected"}
-	streamsStreamOptions = []string{1:"rtsp://", 2:"publish://"}
-	streamsTracksOptions = []string{"video", "audio"}
-	streamsBroadcastOptions = []string{"rtsp", "hls", "mse", "webrtc"}
+	accessTypeOptions         = []string{"public", "private", "protected"}
+	streamsStreamOptions      = []string{1: "rtsp://", 2: "publish://"}
+	streamsTracksOptions      = []string{"video", "audio"}
+	streamsBroadcastOptions   = []string{"rtsp", "hls", "mse", "webrtc"}
 
 	inputWidth     = 50
 	serverFilePath = "server.yaml"
@@ -96,34 +96,34 @@ var (
 	}
 
 	StreamInputLabel = map[string]string{
-		"cameraName": "Camera name",
+		"cameraName":     "Camera name",
 		"cameraLocation": "Camera location",
-		"device": "Device ID",
-		"cameraEnable": "Camera usage",
+		"device":         "Device ID",
+		"cameraEnable":   "Camera usage",
 
-		"clusterNode": "Cluster node",
+		"clusterNode":      "Cluster node",
 		"clusterSecondary": "Cluster node secondary",
 
 		"reconnectAttempts": "Number of reconnects",
-		"reconnectTimeout": "Timeout before reconnect attempt",
+		"reconnectTimeout":  "Timeout before reconnect attempt",
 		"reconnectInterval": "Timeout interval for reconnect",
 
-		"streamsEnable": "Stream usage",
-		"streamsStream": "RTSP source URL",
-		"streamsTracks": "Enabled rtsp channels",
+		"streamsEnable":    "Stream usage",
+		"streamsStream":    "RTSP source URL",
+		"streamsTracks":    "Enabled rtsp channels",
 		"streamsBroadcast": "Enabled restreaming protocols",
 
-		"accessType": "Access type",
-		"accessAuthType": "Authorization type",
-		"accessAuthUser": "User",
+		"accessType":         "Access type",
+		"accessAuthType":     "Authorization type",
+		"accessAuthUser":     "User",
 		"accessAuthPassword": "Password",
-		"accessWhitelist": "Access whitelist",
-		"accessLimit": "Access limit of clients",
+		"accessWhitelist":    "Access whitelist",
+		"accessLimit":        "Access limit of clients",
 
-		"dvrEnable": "DVR usage",
+		"dvrEnable":   "DVR usage",
 		"dvrLocation": "Root DVR directory",
-		"dvrDepth": "Duration of DVR keeping",
+		"dvrDepth":    "Duration of DVR keeping",
 		"dvrCapacity": "Limit of DVR size",
-		"dvrChunk": "Chunk duration",
+		"dvrChunk":    "Chunk duration",
 	}
 )
