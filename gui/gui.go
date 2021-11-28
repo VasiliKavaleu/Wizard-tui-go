@@ -2,6 +2,7 @@ package gui
 
 import (
 	"github.com/rivo/tview"
+	"github.com/gdamore/tcell/v2"
 	"os"
 )
 
@@ -36,6 +37,10 @@ func (g *Gui) initMenu() {
 		g.drawServerConfForm()
 	})
 
+	g.menuList.AddItem(menuLabes["createStream"], "", '2', func() {
+		g.drawStreamConfForm()
+	})
+
 	g.menuList.AddItem(menuLabes["exit"], "", 'q', g.drawQuitNotifyForm)
 	g.addChangeServerMenuItem()
 
@@ -47,8 +52,8 @@ func (g *Gui) initMenu() {
 
 func (g *Gui) addChangeServerMenuItem() {
 	if _, err := os.Stat(serverFilePath); err == nil {
-		if g.menuList.GetItemCount() == 2 {
-			g.menuList.InsertItem(1, menuLabes["changeServer"], "", '2', func() {
+		if g.menuList.GetItemCount() == 3 {
+			g.menuList.InsertItem(2, menuLabes["changeServer"], "", '3', func() {
 				g.editServer = true
 				g.drawServerConfForm()
 			})
@@ -120,9 +125,8 @@ func createMainLayout(commandList tview.Primitive) (layout *tview.Frame) {
 			AddItem(info, 3, 1, false), 0, 2, true).
 		AddItem(tview.NewBox(), 0, 1, false)
 
-	clayout := tview.NewFrame(flex).SetBorders(4, 2, 8, 8, 0, 0)
-
-	return clayout
+	layout = tview.NewFrame(flex).SetBorders(4, 2, 8, 8, 0, 0)
+	return 
 }
 
 func createCommandList() (commandList *tview.List) {
@@ -130,4 +134,15 @@ func createCommandList() (commandList *tview.List) {
 	commandList.SetBorder(true).SetTitle(mainMenuTitle)
 	commandList.ShowSecondaryText(false)
 	return commandList
+}
+
+
+func createFormLayout(form tview.Primitive) tview.Primitive {
+	layout := tview.NewFlex().SetDirection(tview.FlexRow)
+	layout.AddItem(form, 0, 2, true)
+	layout.AddItem(tview.NewTextView().
+					SetText(navigate).
+					SetTextAlign(tview.AlignCenter).
+					SetTextColor(tcell.ColorBurlyWood), 2, 1, false)
+	return layout
 }

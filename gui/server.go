@@ -75,19 +75,13 @@ func (g *Gui) drawServerConfForm() {
 	form.SetButtonsAlign(tview.AlignRight)
 	form.SetBorder(true).SetTitle(labelServerForm)
 
-	g.addPopUpHandler(cnf, form)
-
-	createSereverConfigPage := func(form tview.Primitive) tview.Primitive {
-		createPage := tview.NewFlex().SetDirection(tview.FlexRow)
-		createPage.AddItem(form, 0, 2, true)
-		return createPage
-	}(form)
-
+	g.addPopUpServerHandler(cnf, form)
+	createSereverConfigPage := createFormLayout(form)
 	g.pages.AddAndSwitchToPage(serverFormId, createSereverConfigPage, true)
 }
 
 // addPopUpHandler adds handler to some DropDown field which show forms depending on input value
-func (g *Gui) addPopUpHandler(cnf *utils.ServerConfig, form *tview.Form) {
+func (g *Gui) addPopUpServerHandler(cnf *utils.ServerConfig, form *tview.Form) {
 	apiUsageDropDown := form.GetFormItemByLabel(ServerInputLabel["apiUsage"]).(*tview.DropDown)
 	apiUsageDropDown.SetSelectedFunc(func(text string, index int) {
 		if index != 0 {

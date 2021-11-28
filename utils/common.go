@@ -68,6 +68,11 @@ func GetWrongFormatMsg(fieldName, exampleFormat string) (msg string) {
 	return
 }
 
+func GetFileNameByUuid(uuid string) (fileNmae string) {
+	fileNmae = fmt.Sprintf("%s.yaml", uuid)
+	return
+}
+
 func GetIndexFromVal(values []string, value string) int {
 	for ind, val := range values {
 		if value == val {
