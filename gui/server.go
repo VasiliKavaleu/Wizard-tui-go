@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"github.com/gdamore/tcell/v2"
 )
 
 // Main form consisting all input field and DropDown filds for moving other forms
@@ -74,6 +75,14 @@ func (g *Gui) drawServerConfForm() {
 	form.SetCancelFunc(exit)
 	form.SetButtonsAlign(tview.AlignRight)
 	form.SetBorder(true).SetTitle(labelServerForm)
+
+	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyCtrlS:
+			saveServerConf()
+		}
+		return event
+	})
 
 	g.addPopUpServerHandler(cnf, form)
 	createSereverConfigPage := createFormLayout(form)

@@ -4,8 +4,7 @@ import (
 	"configurator/utils"
 	"github.com/rivo/tview"
 	"github.com/satori/go.uuid"
-	// "gopkg.in/yaml.v3"
-	// "io/ioutil"
+	"github.com/gdamore/tcell/v2"
 	"strconv"
 	"strings"
 )
@@ -123,6 +122,14 @@ func (g *Gui) drawStreamConfForm() {
 	form.SetCancelFunc(exit)
 	form.SetButtonsAlign(tview.AlignRight)
 	form.SetBorder(true).SetTitle(labelServerForm)
+
+	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyCtrlS:
+			saveStreamConf()
+		}
+		return event
+	})
 
 	createStreamConfigPage := createFormLayout(form)
 	g.pages.AddAndSwitchToPage(streamFormId, createStreamConfigPage, true)

@@ -14,7 +14,7 @@ var (
 	labelServerForm = " Fill out server configuration form "
 	labelApiForm    = " API configuration "
 	labelCpanelForm = " Cpanel configuration "
-	navigate = "<Tab>: Down, <Shift+Tab>: Up, <Esc>: Exit"
+	navigate = "<Tab>: Down, <Shift+Tab>: Up, <Enter>: Select an option, <Ctrl+S>: Save, <Esc>: Exit"
 
 	menuLabes = map[string]string{
 		"createServer": "Create server configuration",
