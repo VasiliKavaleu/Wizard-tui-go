@@ -1,5 +1,7 @@
 package gui
 
+import 	"github.com/gdamore/tcell/v2"
+
 var (
 	// messages
 	mainMenuTitle      = " Select an option "
@@ -44,6 +46,9 @@ var (
 	inputWidth     = 50
 	serverFilePath = "server.yaml"
 	passwordMask   = '*'
+
+	// colors
+	requiredMSGColor = tcell.ColorTomato
 
 	// input info
 	ServerInputLabel = map[string]string{

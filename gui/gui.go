@@ -92,6 +92,7 @@ func (g *Gui) drawOkCancelNotifyForm(notifyMsg, okTitleBtn, cancelTitleBtn, show
 func (g *Gui) drawNotifyMsgOkForm(msg string, whichFormShow string) {
 	modal := tview.NewModal().
 		SetText(msg).
+		SetTextColor(requiredMSGColor).
 		AddButtons([]string{"Ok"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Ok" {

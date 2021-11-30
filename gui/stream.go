@@ -107,7 +107,7 @@ func (g *Gui) drawStreamConfForm() {
 	form.AddInputField(StreamInputLabel["dvrChunk"], "", inputWidth, nil, nil)
 
 	exit := func() {
-		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", serverFormId, "main")
+		g.drawOkCancelNotifyForm(notSaveMsg, "Ok", "Cancel", streamFormId, "main")
 	}
 
 	saveStreamConf := func() {

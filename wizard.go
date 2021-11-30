@@ -6,11 +6,16 @@ import (
 	"github.com/rivo/tview"
 	"log"
 	"os"
+	"runtime"
 )
 
 func run() int {
-
-	tview.Styles.ContrastBackgroundColor = tcell.ColorSlateGrey
+	if runtime.GOOS == "windows" {
+		tview.Styles.PrimitiveBackgroundColor = tcell.ColorSlateGrey
+		tview.Styles.ContrastBackgroundColor = tcell.ColorDimGrey
+	} else {
+		tview.Styles.ContrastBackgroundColor = tcell.ColorSlateGrey
+	}
 	tview.Styles.MoreContrastBackgroundColor = tcell.ColorTan
 	tview.Styles.BorderColor = tcell.ColorTan
 	tview.Styles.TitleColor = tcell.ColorLightGoldenrodYellow

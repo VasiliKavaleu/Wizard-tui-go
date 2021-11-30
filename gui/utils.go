@@ -39,6 +39,6 @@ func createFormLayout(form tview.Primitive) tview.Primitive {
 	layout.AddItem(tview.NewTextView().
 		SetText(navigate).
 		SetTextAlign(tview.AlignCenter).
-		SetTextColor(tcell.ColorLightCyan), 2, 1, false)
+		SetTextColor(tcell.ColorSpringGreen), 2, 1, false)
 	return layout
 }
