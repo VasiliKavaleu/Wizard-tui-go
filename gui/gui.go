@@ -21,7 +21,7 @@ func New() *Gui {
 
 func (g *Gui) Start() error {
 	g.initMenu()
-	if err := g.app.EnableMouse(true).Run(); err != nil {
+	if err := g.app.Run(); err != nil {
 		g.app.Stop()
 		return err
 	}

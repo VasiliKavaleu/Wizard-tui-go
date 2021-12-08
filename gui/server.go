@@ -17,11 +17,10 @@ func (g *Gui) drawServerConfForm() {
 	if g.editServer {
 		yfile, _ := ioutil.ReadFile(serverFilePath)
 		_ = yaml.Unmarshal(yfile, &initialCnf)
-
 	}
 
 	cnf := &initialCnf
-
+	
 	form := tview.NewForm()
 
 	form.AddInputField(ServerInputLabel["mediaStorages"], utils.ListToStr(cnf.Server.Media.Storages), inputWidth, nil, nil)
